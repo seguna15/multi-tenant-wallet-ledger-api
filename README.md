@@ -1,98 +1,178 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Ledger API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A production-grade, multi-tenant wallet and ledger API built with NestJS, PostgreSQL, Redis, and RabbitMQ.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Designed to demonstrate financial-grade engineering: double-entry bookkeeping, pessimistic locking, idempotency, the transactional outbox pattern, and signed webhook delivery.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## What It Does
 
-## Project setup
+Each tenant (e.g. a fintech company) onboards via API key. Their users hold wallets in multiple currencies. Transfers between wallets are recorded as immutable double-entry journal entries — balances are always derived, never stored. Events are published reliably via the outbox pattern and delivered to tenants as signed webhook payloads.
 
-```bash
-$ pnpm install
+---
+
+## Tech Stack
+
+| Layer | Technology |
+| --- | --- |
+| Framework | NestJS (TypeScript) |
+| Database | PostgreSQL via Prisma ORM v7 |
+| Cache | Redis |
+| Message Broker | RabbitMQ |
+| Auth | JWT + API Key (Argon2 hashing) |
+| Encryption | AES-256-GCM (webhook secrets at rest) |
+
+---
+
+## Architecture Overview
+
+```text
+Client
+  │
+  ▼
+[ API Gateway / NestJS ]
+  ├── Tenant Module      — registration, API key issuance
+  ├── Auth Module        — JWT + API key strategies
+  ├── Wallet Module      — wallet creation, balance reads (Redis cache)
+  ├── Transfer Module    — transfer initiation, pessimistic locking
+  ├── Ledger Module      — double-entry journal engine
+  └── Outbox Worker      — polls DB, publishes to RabbitMQ
+          │
+          ▼
+    [ RabbitMQ ]
+          │
+    ┌─────┴──────┐
+    ▼            ▼
+ Ledger       Notification
+ Consumer     Consumer
+ (journals)   (webhooks → tenant)
 ```
 
-## Compile and run the project
+---
+
+## Key Design Decisions
+
+**1. Balances are never stored — always derived**
+`balance = SUM(credits) - SUM(debits)` from `JournalEntry`. Eliminates balance drift. Redis cache sits in front for read performance.
+
+**2. Double-entry bookkeeping**
+Every transfer writes a DEBIT on the source wallet and a CREDIT on the destination wallet atomically. The ledger is append-only — no updates or deletes.
+
+**3. Pessimistic locking on transfers**
+`SELECT FOR UPDATE` on the source wallet inside the transfer transaction prevents race conditions under concurrent load.
+
+**4. Transactional outbox pattern**
+The `Transfer` record and its `OutboxEvent` are written in the same Postgres transaction. The outbox worker publishes to RabbitMQ separately — guarantees at-least-once delivery even if the broker is down.
+
+**5. Signed webhooks**
+Tenant webhook secrets are encrypted at rest (AES-256-GCM). Outbound payloads are signed with HMAC-SHA256. Tenants verify the `X-Webhook-Signature` header — the secret never travels over the wire.
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Docker & Docker Compose
+- Node.js 20+
+- pnpm
+
+### 1. Clone and install
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+git clone <repo-url>
+cd ledger-api
+pnpm install
 ```
 
-## Run tests
+### 2. Configure environment
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+cp .env.example .env
 ```
 
-## Deployment
+Fill in `.env`:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+```env
+PORT=8000
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=ledger
+POSTGRES_PORT=5432
+DB_URL=postgresql://postgres:postgres@localhost:5432/ledger
+
+REDIS_PASSWORD=redis
+REDIS_PORT=6379
+
+RABBITMQ_USER=guest
+RABBITMQ_PASSWORD=guest
+RABBITMQ_VHOST=/
+RABBITMQ_PORT=5672
+RABBITMQ_MANAGEMENT_PORT=15672
+
+# Generate with: openssl rand -hex 32
+WEBHOOK_ENCRYPTION_KEY=
+```
+
+### 3. Start infrastructure
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+docker-compose up -d
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Starts PostgreSQL, Redis, and RabbitMQ.
 
-## Resources
+### 4. Run migrations and seed
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+npx prisma migrate dev
+pnpm run seed
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+The seed script creates a test tenant, user, and GBP wallet. It outputs the raw API key and webhook secret — **save them, they are shown once**.
 
-## Support
+### 5. Start the API
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+pnpm run start:dev
+```
 
-## Stay in touch
+| URL | Description |
+| --- | --- |
+| `http://localhost:8000/api/v1` | API base |
+| `http://localhost:8000/api/docs` | Swagger UI |
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
 
-## License
+## Security
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+| Concern | Approach |
+| --- | --- |
+| API keys | `crypto.randomBytes` generation, only Argon2 hash stored |
+| API key format | Prefixed `lapi_...` for easy identification and masking in logs |
+| API key expiry | Configurable `apiKeyExpiresAt` per tenant |
+| Webhook secrets | Encrypted at rest with AES-256-GCM, never transmitted |
+| Webhook delivery | Payload signed with HMAC-SHA256, verified by tenant via `X-Webhook-Signature` |
+| Tenant isolation | All queries scoped to `tenantId` — no cross-tenant data access |
+| Passwords | Hashed with Argon2 |
+
+---
+
+## Project Status
+
+| Week | Theme | Status |
+| --- | --- | --- |
+| Week 1 | Foundation & Auth | In progress |
+| Week 2 | Core Financial Logic | Not started |
+| Week 3 | Event-Driven & Observability | Not started |
+| Week 4 | Polish & Deploy | Not started |
+
+See [PROJECT_PLAN.md](PROJECT_PLAN.md) for the full day-by-day breakdown.
+
+---
+
+## Author
+
+Adisa Oluwasegun Qasim

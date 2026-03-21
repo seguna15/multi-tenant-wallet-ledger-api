@@ -1,0 +1,160 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Tenant {
+    id String @id @default(uuid())
+    name String
+    apiKeyHash String @unique
+    apiKeyLastUsedAt DateTime?
+    apiKeyExpiresAt DateTime?
+    webhookUrl String?
+    webhookSecret String?
+    isActive Boolean @default(true)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    users User[]
+    wallets Wallet[]
+    transfers Transfer[]
+    journalEntries JournalEntry[]
+    outboxEvents OutboxEvent[]
+}
+
+model User {
+    id String @id @default(uuid())
+    tenantId String
+    email String
+    passwordHash String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    tenant Tenant @relation(fields: [tenantId], references: [id])
+    wallets Wallet[]
+
+    @@unique([tenantId, email])
+    @@index([tenantId])
+}
+
+model Wallet {
+    id String @id @default(uuid())
+    tenantId String
+    userId String
+    currency Currency
+    isActive Boolean @default(true)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    tenant Tenant @relation(fields: [tenantId], references: [id])
+    user User @relation(fields: [userId], references: [id])
+    transfersFrom Transfer[] @relation("WalletFrom")
+    transfersTo Transfer[] @relation("WalletTo")
+    journalEntries JournalEntry[]
+
+    @@index([tenantId])
+    @@index([tenantId,userId])
+}
+
+model Transfer {
+    id String @id @default(uuid())
+    tenantId String
+    walletFromId String
+    walletToId String
+    amount Decimal @db.Decimal(18, 8)
+    currency Currency
+    status TransferStatus @default(INITIATED)
+    fxRate Decimal @default(1) @db.Decimal(18, 8)
+    idempotencyKey String?  @unique
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    tenant Tenant @relation(fields: [tenantId], references: [id])
+    walletFrom Wallet @relation("WalletFrom", fields: [walletFromId], references: [id])
+    walletTo Wallet @relation("WalletTo", fields: [walletToId], references: [id])
+    journalEntries JournalEntry[]
+    outboxEvents OutboxEvent[]
+
+    @@index([tenantId])
+    @@index([tenantId, status])
+    @@index([idempotencyKey])
+}
+
+model JournalEntry {
+    id String @id @default(uuid())
+    tenantId String
+    walletId String
+    transferId String
+    type JournalEntryType
+    amount Decimal @db.Decimal(18, 8)
+    currency Currency
+    createdAt DateTime @default(now())
+
+    tenant Tenant @relation(fields: [tenantId], references: [id])
+    wallet Wallet @relation(fields: [walletId], references: [id])
+    transfer Transfer @relation(fields: [transferId], references: [id])
+
+    @@index([tenantId])
+    @@index([tenantId, walletId])
+    @@index([tenantId, transferId])
+}
+
+model OutboxEvent {
+    id String @id @default(uuid())
+    tenantId String
+    transferId String @unique
+    eventType OutboxEventType
+    payload Json
+    status OutboxStatus @default(PENDING)
+    retryCount Int @default(0)
+    publishedAt DateTime?
+    createdAt DateTime @default(now())
+
+    tenant Tenant @relation(fields: [tenantId], references: [id])
+    transfer Transfer @relation(fields: [transferId], references: [id])
+
+    @@index([tenantId, status])
+    @@index([tenantId])
+}
+
+
+enum Currency {
+    USD
+    EUR
+    GBP
+    NGN
+    JPY
+    AUD
+    CAD
+    CNY
+}
+
+
+enum TransferStatus {
+    INITIATED
+    PROCESSING
+    COMPLETED
+    FAILED
+}
+
+enum JournalEntryType {
+    DEBIT
+    CREDIT
+}
+
+enum OutboxStatus {
+    PENDING
+    PUBLISHED
+    FAILED
+}
+
+enum OutboxEventType {
+    TRANSFER_INITIATED
+    TRANSFER_COMPLETED
+    TRANSFER_FAILED
+}

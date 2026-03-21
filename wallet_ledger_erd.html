@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wallet & Ledger API — Entity Relationship Diagram</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: sans-serif;
+      background: #f9f8f6;
+      color: #1a1a18;
+    }
+    h2 {
+      font-size: 15px;
+      font-weight: 500;
+      margin: 0 0 4px;
+      color: #1a1a18;
+    }
+    p {
+      font-size: 13px;
+      color: #73726c;
+      margin: 0 0 20px;
+    }
+    #erd {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    /* Force entity header text legible — mermaid sometimes emits fill="#ffffff" */
+    #erd svg text[fill="#ffffff"],
+    #erd svg text[fill="#FFFFFF"] {
+      fill: #1a1a18 !important;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { background: #1a1a18; color: #c2c0b6; }
+      h2 { color: #e8e6de; }
+      #erd { background: #24241f; border-color: rgba(255,255,255,0.08); }
+      #erd svg text[fill="#ffffff"],
+      #erd svg text[fill="#FFFFFF"] {
+        fill: #e8e6de !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>Multi-Tenant Wallet & Ledger API</h2>
+  <p>Entity relationship diagram — generated from Prisma schema</p>
+  <div id="erd"></div>
+  <script type="module">
+    import mermaid from 'https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs';
+    const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+    await document.fonts.ready;
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      fontFamily: 'sans-serif',
+      themeVariables: {
+        darkMode: dark,
+        fontSize: '13px',
+        fontFamily: 'sans-serif',
+        lineColor: dark ? '#9c9a92' : '#73726c',
+        textColor: dark ? '#c2c0b6' : '#3d3d3a',
+        primaryColor: dark ? '#2e2e28' : '#e8e6de',
+        primaryTextColor: dark ? '#e8e6de' : '#1a1a18',
+        primaryBorderColor: dark ? '#4a4a42' : '#b4b2a9',
+        attributeBackgroundColorOdd: dark ? '#24241f' : '#f9f8f6',
+        attributeBackgroundColorEven: dark ? '#2a2a24' : '#f1efe8',
+      },
+    });
+
+    const { svg } = await mermaid.render('erd-svg', `erDiagram
+      Tenant ||--o{ User : has
+      Tenant ||--o{ Wallet : owns
+      Tenant ||--o{ Transfer : scopes
+      Tenant ||--o{ OutboxEvent : scopes
+      User ||--o{ Wallet : holds
+      Wallet ||--o{ Transfer : "source (walletFromId)"
+      Wallet ||--o{ Transfer : "destination (walletToId)"
+      Wallet ||--o{ JournalEntry : records
+      Transfer ||--o{ JournalEntry : generates
+      Transfer ||--|| OutboxEvent : triggers
+
+      Tenant {
+        uuid id PK
+        string name
+        string apiKeyHash
+        string webhookUrl
+        string webhookSecret
+        boolean isActive
+        timestamp createdAt
+        timestamp updatedAt
+      }
+      User {
+        uuid id PK
+        uuid tenantId FK
+        string email
+        string passwordHash
+        timestamp createdAt
+        timestamp updatedAt
+      }
+      Wallet {
+        uuid id PK
+        uuid tenantId FK
+        uuid userId FK
+        string currency
+        boolean isActive
+        timestamp createdAt
+        timestamp updatedAt
+      }
+      Transfer {
+        uuid id PK
+        uuid tenantId FK
+        uuid walletFromId FK
+        uuid walletToId FK
+        decimal amount
+        string currency
+        string status
+        decimal fxRate
+        string idempotencyKey
+        timestamp createdAt
+        timestamp updatedAt
+      }
+      JournalEntry {
+        uuid id PK
+        uuid walletId FK
+        uuid transferId FK
+        string type
+        decimal amount
+        string currency
+        timestamp createdAt
+      }
+      OutboxEvent {
+        uuid id PK
+        uuid tenantId FK
+        uuid transferId FK
+        string eventType
+        json payload
+        string status
+        int retryCount
+        timestamp publishedAt
+        timestamp createdAt
+      }
+    `);
+
+    document.getElementById('erd').innerHTML = svg;
+
+    // Round entity box corners
+    document.querySelectorAll('#erd svg .node').forEach(node => {
+      const firstPath = node.querySelector('path[d]');
+      if (!firstPath) return;
+      const d = firstPath.getAttribute('d');
+      const nums = d.match(/-?[\d.]+/g)?.map(Number);
+      if (!nums || nums.length < 8) return;
+      const xs = [nums[0], nums[2], nums[4], nums[6]];
+      const ys = [nums[1], nums[3], nums[5], nums[7]];
+      const x = Math.min(...xs), y = Math.min(...ys);
+      const w = Math.max(...xs) - x, h = Math.max(...ys) - y;
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', x); rect.setAttribute('y', y);
+      rect.setAttribute('width', w); rect.setAttribute('height', h);
+      rect.setAttribute('rx', '8');
+      for (const a of ['fill', 'stroke', 'stroke-width', 'class', 'style']) {
+        if (firstPath.hasAttribute(a)) rect.setAttribute(a, firstPath.getAttribute(a));
+      }
+      firstPath.replaceWith(rect);
+    });
+
+    // Strip borders from attribute row stripes
+    document.querySelectorAll('#erd svg .row-rect-odd path, #erd svg .row-rect-even path').forEach(p => {
+      p.setAttribute('stroke', 'none');
+    });
+
+    // Fix any white-filled text mermaid emits on entity header rows
+    const headerColour = dark ? '#e8e6de' : '#1a1a18';
+    document.querySelectorAll('#erd svg text').forEach(el => {
+      const fill = (el.getAttribute('fill') || '').toLowerCase();
+      if (fill === '#ffffff' || fill === 'white') {
+        el.setAttribute('fill', headerColour);
+      }
+    });
+  </script>
+</body>
+</html>

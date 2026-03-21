@@ -40,15 +40,16 @@
 
 ---
 
-### Day 2 — Monday 7th April
+### Day 2 — Saturday 21st & Sunday 22nd March *(Ahead of schedule — extra time)*
 **Theme: Database Schema & Prisma Setup**
 
-- [ ] Initialise Prisma and connect to PostgreSQL
-- [ ] Write schema for: `Tenant`, `User`, `Wallet`, `Transfer`, `JournalEntry`, `OutboxEvent`
-- [ ] Add cross-tenant check constraint on Transfer table
-- [ ] Run initial migration
-- [ ] Seed script with one test tenant and user
-- [ ] Verify schema in Prisma Studio
+**Saturday 21st March — Schema & Migration**
+- [x] Initialise Prisma and connect to PostgreSQL
+- [x] Write schema for: `Tenant`, `User`, `Wallet`, `Transfer`, `JournalEntry`, `OutboxEvent`
+- [x] Add cross-tenant check constraint on Transfer table
+- [x] Run initial migration
+- [x] Seed script with one test tenant and user
+- [x] Verify schema in Prisma Studio
 
 **Checkpoint:** All tables exist in DB. Seed runs without errors. Relationships are correct.
 
@@ -337,4 +338,4 @@ If you finish a day early, write better tests or improve the README. The temptat
 
 ---
 
-*Last updated: 19th March 2026*
+*Last updated: 21st March 2026*
