@@ -4,6 +4,7 @@ import {PrismaPg} from "@prisma/adapter-pg";
 import * as argon2 from "argon2";
 import * as crypto from "crypto";
 import { encrypt } from "@shared/utils/encryption";
+import { generateApiKey, hashApiKey } from "@shared/utils/api-key.util";
 
 const adapter = new PrismaPg({ connectionString: process.env.DB_URL!});
 const prisma = new PrismaClient({ adapter });
@@ -12,8 +13,8 @@ async function main() {
     console.log("Seeding database...");
 
     //generate a raw API key  - this is the only time we will have access to the raw key, so we need to save it somewhere secure
-    const rawApiKey = `lapi_${crypto.randomBytes(32).toString("hex")}`;
-    const apiKeyHash = await argon2.hash(rawApiKey);
+    const rawApiKey = generateApiKey();
+    const apiKeyHash = await hashApiKey(rawApiKey);
     const webhookSecret = crypto.randomBytes(32).toString("hex");
 
     const tenant = await prisma.tenant.create({

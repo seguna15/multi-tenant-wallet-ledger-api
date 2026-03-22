@@ -1,11 +1,15 @@
+import { PrismaModule } from '@common/database/prisma.module';
+import { TenantModule } from '@modules/tenant/tenant.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ClsModule } from 'nestjs-cls';
 import { LoggerModule } from 'nestjs-pino';
 
 
+
 @Module({
   imports: [
+    PrismaModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -23,7 +27,8 @@ import { LoggerModule } from 'nestjs-pino';
       middleware: {
         mount: true, // automatically mount the middleware to capture context for each request
       }
-    })
+    }),
+    TenantModule
   ],
   controllers: [],
   providers: [],

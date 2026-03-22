@@ -1,12 +1,12 @@
 import { TenantStore } from "@common/cls/tenant-store.interface";
-import { PrismaClient } from "@prisma/client";
 import { ClsService } from "nestjs-cls";
 import { Logger } from "@nestjs/common";
+import { PrismaService } from "@common/database/prisma.service";
 
 export abstract class BaseRepository {
   protected readonly logger: Logger;
   constructor(
-    protected readonly prisma: PrismaClient,
+    protected readonly prisma: PrismaService,
     protected readonly clsService: ClsService<TenantStore>,
   ) {
     this.logger = new Logger(this.constructor.name);
@@ -110,5 +110,12 @@ export abstract class BaseRepository {
     return {
       AND: [where, { [relation]: { tenantId: tenantId ?? this.tenantId } }],
     };
+  }
+
+  protected get tenantFilter(): { tenantId: string } {
+    if(this.clsService.get('isGlobalAdmin')) {
+      return {} as { tenantId: string };
+    }
+    return { tenantId: this.tenantId };
   }
 }
