@@ -21,7 +21,7 @@
       "@modules/*": ["src/modules/*"],
       "@common/*": ["src/common/*"],
       "@config/*": ["src/config/*"],
-      "@utils/*": ["utils/*"]
+      "@shared/*": ["shared/*"]
     }
   },
   "ts-node": {

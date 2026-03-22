@@ -3,7 +3,7 @@ import {PrismaClient, Currency} from "@prisma/client";
 import {PrismaPg} from "@prisma/adapter-pg";
 import * as argon2 from "argon2";
 import * as crypto from "crypto";
-import { encrypt } from "@utils/encryption";
+import { encrypt } from "@shared/utils/encryption";
 
 const adapter = new PrismaPg({ connectionString: process.env.DB_URL!});
 const prisma = new PrismaClient({ adapter });

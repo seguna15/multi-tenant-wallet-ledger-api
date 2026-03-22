@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ClsModule } from 'nestjs-cls';
 import { LoggerModule } from 'nestjs-pino';
 
 
@@ -17,7 +18,12 @@ import { LoggerModule } from 'nestjs-pino';
         redact: ['req.headers.authorization', 'req.headers["x-api-key"]'],
       },
     }),
-  
+    ClsModule.forRoot({
+      global: true, // cls module will be available globally without needing to import it in other modules
+      middleware: {
+        mount: true, // automatically mount the middleware to capture context for each request
+      }
+    })
   ],
   controllers: [],
   providers: [],

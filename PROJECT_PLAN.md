@@ -48,6 +48,8 @@
 - [x] Write schema for: `Tenant`, `User`, `Wallet`, `Transfer`, `JournalEntry`, `OutboxEvent`
 - [x] Add cross-tenant check constraint on Transfer table
 - [x] Run initial migration
+
+**Sunday 22nd March — Seed & Verify**
 - [x] Seed script with one test tenant and user
 - [x] Verify schema in Prisma Studio
 
@@ -55,7 +57,7 @@
 
 ---
 
-### Day 3 — Tuesday 8th April
+### Day 3 — Sunday 22nd March *(Ahead of schedule — continuing same day)*
 **Theme: Tenant Module**
 
 - [ ] Generate Tenant NestJS module, service, controller
@@ -338,4 +340,4 @@ If you finish a day early, write better tests or improve the README. The temptat
 
 ---
 
-*Last updated: 21st March 2026*
+*Last updated: 22nd March 2026*
