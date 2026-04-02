@@ -7,7 +7,7 @@ import {
 import { TenantRepository } from "@modules/tenant/tenant.repository";
 import { CreateTenantDto, UpdateTenantDto } from "@modules/tenant/dto";
 import { generateApiKey, hashApiKey } from "@shared/utils/api-key.util";
-import { CreateTenantResult } from "@modules/tenant/types/tenant.types";
+import { CreateTenantResult, RotateTenantApiKeyResult } from "@modules/tenant/types/tenant.types";
 import { Prisma, Tenant } from "@prisma/client";
 
 @Injectable()
@@ -71,5 +71,31 @@ export class TenantService {
         }
 
         await this.tenantRepository.softDeleteSingleTenant(id);
+    }
+
+    async rotateTenantApiKey(id: string): Promise<RotateTenantApiKeyResult> {
+        const tenant = await this.tenantRepository.findSingleTenant(id);
+
+        if (!tenant) {
+            throw new NotFoundException(`Tenant ${id} not found`);
+        }
+
+        if(!tenant.isActive){
+            throw new ConflictException('Cannot rotate API key for an inactive tenant');
+        }
+
+        const newPlaintextApiKey = generateApiKey();
+        const newApiKeyHash = await hashApiKey(newPlaintextApiKey);
+
+        try {
+            await this.tenantRepository.rotateApiKey(id, newApiKeyHash);
+            return {apiKey: newPlaintextApiKey}
+        }catch (error) {
+            if(error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002'){
+                throw new InternalServerErrorException('API key generation collision. Please retry.');
+            }
+            throw error;
+        
+        }
     }
 }

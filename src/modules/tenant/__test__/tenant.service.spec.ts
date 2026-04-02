@@ -56,6 +56,7 @@ describe('TenantService', () => {
             findSingleTenant: jest.fn(),
             updateSingleTenant: jest.fn(),
             softDeleteSingleTenant: jest.fn(),
+            rotateApiKey: jest.fn(),
           },
         },
       ],
@@ -240,6 +241,67 @@ describe('TenantService', () => {
       ).rejects.toThrow(ConflictException);
 
       expect(repo.softDeleteSingleTenant).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('rotateApiKey', () => {
+    it('returns a new plaintext API key', async () => {
+      mockGenerateApiKey.mockReturnValue('lk_newkey');
+      mockHashApiKey.mockResolvedValue('$argon2id$new_hash');
+      repo.findSingleTenant.mockResolvedValue(mockTenant());
+      repo.rotateApiKey.mockResolvedValue(
+        mockTenant({ apiKeyHash: '$argon2id$new_hash' }),
+      );
+
+      const result = await service.rotateTenantApiKey(
+        'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      );
+
+      expect(result.apiKey).toBe('lk_newkey');
+    });
+
+    it('stores the new hash, not the plaintext key', async () => {
+      mockGenerateApiKey.mockReturnValue('lk_newkey');
+      mockHashApiKey.mockResolvedValue('$argon2id$new_hash');
+      repo.findSingleTenant.mockResolvedValue(mockTenant());
+      repo.rotateApiKey.mockResolvedValue(mockTenant());
+
+      await service.rotateTenantApiKey('a1b2c3d4-e5f6-7890-abcd-ef1234567890');
+
+      expect(repo.rotateApiKey).toHaveBeenCalledWith(
+        'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        '$argon2id$new_hash', // hash, not plaintext
+      );
+    });
+
+    it('throws NotFoundException when tenant does not exist', async () => {
+      repo.findSingleTenant.mockResolvedValue(null);
+
+      await expect(
+        service.rotateTenantApiKey('a1b2c3d4-e5f6-7890-abcd-ef1234567890'),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('throws ConflictException when tenant is deactivated', async () => {
+      repo.findSingleTenant.mockResolvedValue(mockTenant({ isActive: false }));
+
+      await expect(
+        service.rotateTenantApiKey('a1b2c3d4-e5f6-7890-abcd-ef1234567890'),
+      ).rejects.toThrow(ConflictException);
+    });
+
+    it('throws InternalServerErrorException on P2002 hash collision', async () => {
+      repo.findSingleTenant.mockResolvedValue(mockTenant());
+      repo.rotateApiKey.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError('Unique constraint', {
+          code: 'P2002',
+          clientVersion: '7.0.0',
+        }),
+      );
+
+      await expect(
+        service.rotateTenantApiKey('a1b2c3d4-e5f6-7890-abcd-ef1234567890'),
+      ).rejects.toThrow(InternalServerErrorException);
     });
   });
 });

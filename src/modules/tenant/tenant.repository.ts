@@ -60,4 +60,11 @@ export class TenantRepository extends BaseRepository {
     })
   }
 
+  rotateApiKey(id: string,  newApiKeyHash: string): Promise<Tenant> {
+    return this.prisma.tenant.update({
+        where: { id, ...this.tenantFilter },
+        data: { apiKeyHash: newApiKeyHash, apiKeyLastUsedAt: null },
+    })
+  }
+
 }

@@ -62,4 +62,21 @@ export class TenantController {
         await this.tenantService.softDeleteSingleTenant(id);
         return;
     }
+
+    @Post(":id/rotate-api-key")
+    @UseGuards(/*AuthGuard('headerapikey'),*/ TenantClsGuard )
+    @ApiSecurity("x-api-key")
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({
+        summary: 'Rotate tenant API key',
+        description: 'Generates a new API key for the tenant. The old API key will no longer work immediately after rotation.'
+    })
+    @ApiOkResponse({
+        description: 'Tenant API key rotated successfully, new API key returned',
+    })
+    async rotateTenantApiKey(
+        @Param("id", ParseUUIDPipe) id: string,
+    ) {
+        return this.tenantService.rotateTenantApiKey(id);
+    }
 }

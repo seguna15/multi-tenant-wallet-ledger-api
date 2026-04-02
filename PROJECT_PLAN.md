@@ -2,8 +2,9 @@
 
 **Author:** Adisa Oluwasegun Qasim  
 **Start Date:** 6th April 2026  
-**End Date:** 2nd May 2026  
-**Hours/Day:** 4–5 hrs · Mon–Fri
+**End Date:** 15th May 2026  
+**Hours/Day:** 4–5 hrs · Mon–Fri  
+**Stack:** NestJS (backend) · Next.js 15 (frontend) · PostgreSQL · Redis · RabbitMQ
 
 ---
 
@@ -60,16 +61,18 @@
 ### Day 3 — Sunday 22nd March *(Ahead of schedule — continuing same day)*
 **Theme: Tenant Module**
 
-- [ ] Generate Tenant NestJS module, service, controller
-- [ ] Implement tenant registration endpoint `POST /tenants`
-- [ ] Implement tenant update endpoint `PATCH /tenants/:id`
-- [ ] Implement tenant deactivation endpoint `DELETE /tenants/:id`
-- [ ] Implement API key generation on tenant registration
-- [ ] Add API key hashing before storage (never store plain text)
-- [ ] Add row-level tenant scoping to Prisma client middleware
-- [ ] Write unit tests for Tenant service
+- [x] Generate Tenant NestJS module, service, controller
+- [x] Implement tenant registration endpoint `POST /tenants`
+- [x] Implement tenant update endpoint `PATCH /tenants/:id`
+- [x] Implement tenant deactivation endpoint `DELETE /tenants/:id`
+- [x] Implement API key generation on tenant registration
+- [x] Add API key hashing before storage (never store plain text)
+- [x] Add row-level tenant scoping to Prisma client middleware
+- [x] Write unit tests for Tenant service
+- [x] Implement `POST /tenants/:id/rotate-api-key` — invalidates current key, returns new plaintext key once
+- [x] Hash new API key before storage — plaintext never persisted after rotation
 
-**Checkpoint:** Tenant can register. API key is returned once and never again. Tenant data is isolated.
+**Checkpoint:** Tenant can register. API key is returned once and never again. Rotation invalidates the old key immediately and returns the new key once. Tenant data is isolated.
 
 ---
 
@@ -114,7 +117,7 @@
 - [ ] Generate Wallet NestJS module, service, controller
 - [ ] Implement `POST /wallets` — create wallet (scoped to tenant + user)
 - [ ] Implement `GET /wallets/:id` — get wallet details
-- [ ] Implement `GET /wallets/:id/balance` — balance read via Redis cache first, HTTP to Ledger on miss
+- [ ] Implement `GET /wallets/:id/balance` — balance read via Redis cache first, DB on miss
 - [ ] Add Redis caching layer for balance reads with TTL
 - [ ] Enforce tenant scoping on all wallet queries
 - [ ] Write unit tests for Wallet service
@@ -245,74 +248,217 @@
 
 ---
 
-## Week 4 — Polish, Deploy & Document
-*Goal: Something you're proud to paste into any job application*
+## Week 4 — Next.js Frontend Foundation
+
+*Goal: Authenticated tenant dashboard that talks to the live backend API*
 
 ---
 
 ### Day 15 — Monday 28th April
-**Theme: Redis Rate Limiting & Transaction History**
 
-- [ ] Implement sliding window rate limiting on write endpoints using Redis
-- [ ] Return `429 Too Many Requests` with `Retry-After` header when limit exceeded
-- [ ] Implement `GET /transfers` — paginated transaction history, filterable by date range and status
-- [ ] Scope all history queries to tenantId — tenant can never see another tenant's transfers
-- [ ] Add cursor-based pagination (more efficient than offset for large datasets)
-- [ ] Write unit tests for rate limiting and pagination
+#### Theme: Next.js Project Setup & Auth UI
 
-**Checkpoint:** Rate limiting blocks excessive requests correctly. Transaction history is paginated and fully tenant-scoped.
+- [ ] Scaffold Next.js 15 app with TypeScript, App Router, Tailwind CSS, and shadcn/ui
+- [ ] Configure ESLint, Prettier, and path aliases
+- [ ] Set up TanStack Query for server state and Zod for form validation
+- [ ] Build `/login` page — email/password form, calls `POST /auth/login`, stores JWT in HTTP-only cookie
+- [ ] Implement Next.js middleware for protected route redirects
+- [ ] Build `ApiClient` service layer — wraps fetch, attaches Authorization header, handles 401 globally
+- [ ] Implement logout — clears cookie and redirects to login
+
+**Checkpoint:** Login flow works end to end against live backend. Protected routes redirect unauthenticated users. JWT is never exposed to JavaScript.
 
 ---
 
 ### Day 16 — Tuesday 29th April
-**Theme: Swagger Polish & Error Handling**
 
-- [ ] Document every endpoint in Swagger — request body, response schema, error codes
-- [ ] Add global exception filter — consistent error response shape across all endpoints
-- [ ] Ensure all 4xx and 5xx responses include: `statusCode`, `message`, `correlationId`, `timestamp`
-- [ ] Add request validation pipes — reject malformed payloads with clear error messages
-- [ ] Document webhook payload schema and signature verification in Swagger
+#### Theme: Tenant Dashboard & API Key Management
 
-**Checkpoint:** Every endpoint is documented in Swagger. All error responses have consistent shape. CorrelationId is always present in error responses for traceability.
+- [ ] Build dashboard layout — sidebar navigation, header with tenant name, responsive shell
+- [ ] Build dashboard overview page — tenant stats (wallet count, transfer count, status summary)
+- [ ] Build API key management page — display masked current key, copy button for initial key
+- [ ] Implement rotate API key flow — confirm modal, calls `POST /tenants/:id/rotate-api-key`, displays new key once with copy prompt
+- [ ] Show clear warning that the new key is displayed once and cannot be retrieved again
+
+**Checkpoint:** Tenant can see their dashboard stats and rotate their API key. Rotation confirmation modal prevents accidental key invalidation.
 
 ---
 
 ### Day 17 — Wednesday 30th April
-**Theme: Deployment**
 
-- [ ] Create Railway account and new project
-- [ ] Configure environment variables on Railway (DATABASE_URL, REDIS_URL, RABBITMQ_URL, JWT_SECRET etc.)
-- [ ] Deploy application to Railway
-- [ ] Verify all health check endpoints return healthy on live URL
-- [ ] Test full transfer flow end to end on live deployment
-- [ ] Fix any deployment-specific issues
+#### Theme: Wallet Management UI
 
-**Checkpoint:** Live URL accessible. Health endpoints return green. Full transfer flow works on deployed environment.
+- [ ] Build wallet list page — table of all wallets with currency, masked balance, created date
+- [ ] Build create wallet form — currency selector, submit via `POST /wallets`, optimistic update
+- [ ] Build wallet detail page — full balance, currency, owner info
+- [ ] Build balance card — fetches `GET /wallets/:id/balance`, shows cache-hit indicator in dev mode
+- [ ] Handle empty states and loading skeletons throughout
+
+**Checkpoint:** Wallets can be created and viewed. Balance card updates correctly. Empty state guides the user to create their first wallet.
 
 ---
 
 ### Day 18 — Thursday 1st May
-**Theme: README & Architecture Diagram**
 
-- [ ] Draw architecture diagram in Excalidraw — export as PNG and add to `/docs` folder
-- [ ] Write final README sections: architecture overview, key design decisions, how to run locally, environment variables reference
-- [ ] Add tradeoffs section to README — summarise the 5 architectural decisions from SYSTEM_DESIGN.md in plain English
-- [ ] Add link to live demo URL in README header
-- [ ] Add link to SYSTEM_DESIGN.md from README
+#### Theme: Transfer Flow UI
 
-**Checkpoint:** README tells the full story in under 5 minutes. Architecture diagram is clear and accurate. Someone unfamiliar with the project can run it locally using only the README.
+- [ ] Build initiate transfer form — source wallet selector, destination wallet selector, amount, currency, idempotency key auto-generated
+- [ ] Implement transfer submission — calls `POST /transfers`, shows status badge, polls `GET /transfers/:id` until terminal state
+- [ ] Build transfer detail page — full transfer info with status lifecycle timeline
+- [ ] Handle error states — 422 (cross-tenant, insufficient funds) surfaced as inline form errors
+- [ ] Display correlation ID on error responses for support traceability
+
+**Checkpoint:** Transfer can be initiated end to end from the UI. Status updates in real time. Error states are user-friendly, not raw API errors.
 
 ---
 
 ### Day 19 — Friday 2nd May
-**Theme: Final Review & Release**
 
-- [ ] Read through entire codebase — remove any dead code, TODO comments, console.logs
-- [ ] Verify all tests pass on clean install (`npm ci && npm test`)
+#### Theme: Week 4 Review & Integration
+
+- [ ] Write end-to-end tests for auth flow and transfer flow using Playwright
+- [ ] Fix any integration issues between frontend and backend discovered during testing
+- [ ] Verify all forms have correct validation, loading states, and error handling
+- [ ] Review accessibility — keyboard navigation, focus management, ARIA labels on interactive elements
+- [ ] Review Week 4 — no hardcoded values, no raw API errors shown to users
+
+**Checkpoint:** Full auth → dashboard → wallet → transfer flow works end to end. Playwright tests pass. No raw backend errors visible to the user.
+
+---
+
+## Week 5 — Frontend Advanced Features & Polish
+
+*Goal: Transaction history, real-time updates, and a UI you are proud to demo*
+
+---
+
+### Day 20 — Monday 5th May
+
+#### Theme: Transaction History
+
+- [ ] Build transaction history page — paginated table of transfers, filterable by date range and status
+- [ ] Implement cursor-based pagination controls (next / previous, no offset)
+- [ ] Add status filter (All / Initiated / Processing / Completed / Failed) and date range picker
+- [ ] Scope all queries to tenantId — tenant never sees another tenant's data (enforced backend + verified frontend)
+- [ ] Add CSV export button for filtered results
+
+**Checkpoint:** Transaction history is paginated, filterable, and tenant-scoped. Cursor pagination handles large datasets without performance degradation.
+
+---
+
+### Day 21 — Tuesday 6th May
+
+#### Theme: Real-Time Transfer Status
+
+- [ ] Implement SSE (Server-Sent Events) endpoint on backend — streams transfer status updates per tenantId
+- [ ] Connect frontend to SSE stream — update transfer status badge without polling
+- [ ] Add live activity feed on dashboard — last 5 transfer events, updates in real time
+- [ ] Gracefully handle SSE disconnection — fall back to polling with exponential backoff
+
+**Checkpoint:** Transfer status updates appear in the UI without page refresh. Dashboard feed updates live. SSE disconnection is handled without UI breakage.
+
+---
+
+### Day 22 — Wednesday 7th May
+
+#### Theme: Error Handling, Loading States & Responsive Design
+
+- [ ] Add React error boundaries around all major page sections — unexpected errors show friendly fallback, not blank page
+- [ ] Audit all pages for missing loading skeletons — every async section has a skeleton state
+- [ ] Implement toast notification system for success/error feedback (transfer submitted, key rotated, etc.)
+- [ ] Make all pages fully responsive — mobile, tablet, desktop layouts tested
+- [ ] Add dark mode support via Tailwind and shadcn/ui theme tokens
+
+**Checkpoint:** No blank pages on error. Every data-fetching section has a loading state. All pages render correctly on mobile. Dark mode toggles correctly.
+
+---
+
+### Day 23 — Thursday 8th May
+
+#### Theme: Week 5 Review & Frontend Test Coverage
+
+- [ ] Add unit tests for critical UI logic — transfer form validation, API key masking, pagination state
+- [ ] Write Playwright test for API key rotation flow — confirm modal, key displayed once, masked after refresh
+- [ ] Audit all forms — ensure Zod schemas match backend validation exactly
+- [ ] Remove any hardcoded strings — move all UI copy to constants
+- [ ] Review Week 5 — UI is demo-ready
+
+**Checkpoint:** Frontend test suite passes. UI handles all known edge cases gracefully. No hardcoded values or console errors in production build.
+
+---
+
+## Week 6 — Backend Polish, Deploy & Document
+
+*Goal: Something you're proud to paste into any job application*
+
+---
+
+### Day 24 — Friday 9th May
+
+#### Theme: Redis Rate Limiting & Backend Error Handling
+
+- [ ] Implement sliding window rate limiting on write endpoints using Redis
+- [ ] Return `429 Too Many Requests` with `Retry-After` header when limit exceeded
+- [ ] Add global exception filter — consistent error response shape across all endpoints
+- [ ] Ensure all 4xx and 5xx responses include: `statusCode`, `message`, `correlationId`, `timestamp`
+- [ ] Add request validation pipes — reject malformed payloads with clear error messages
+
+**Checkpoint:** Rate limiting blocks excessive requests correctly. All error responses have consistent shape. CorrelationId is always present in error responses.
+
+---
+
+### Day 25 — Monday 12th May
+
+#### Theme: Swagger Polish
+
+- [ ] Document every backend endpoint in Swagger — request body, response schema, error codes
+- [ ] Document webhook payload schema and signature verification
+- [ ] Document API key rotation endpoint and security considerations
+- [ ] Ensure Swagger reflects the correct auth strategy (JWT vs API key) per endpoint
+
+**Checkpoint:** Every endpoint is documented in Swagger. Auth requirements are clear per endpoint. Swagger is useful as a standalone API reference.
+
+---
+
+### Day 26 — Tuesday 13th May
+
+#### Theme: Deployment
+
+- [ ] Deploy backend to Railway — configure environment variables (DATABASE_URL, REDIS_URL, RABBITMQ_URL, JWT_SECRET, etc.)
+- [ ] Deploy frontend to Vercel — configure `NEXT_PUBLIC_API_URL` pointing to Railway backend
+- [ ] Configure CORS on backend to allow requests from Vercel domain
+- [ ] Verify all health check endpoints return healthy on live backend URL
+- [ ] Test full transfer flow end to end on live deployment (browser → Vercel → Railway → PostgreSQL)
+- [ ] Fix any deployment-specific issues
+
+**Checkpoint:** Live backend URL accessible. Live frontend URL accessible. Full transfer flow works on deployed environment.
+
+---
+
+### Day 27 — Wednesday 14th May
+
+#### Theme: README & Architecture Diagram
+
+- [ ] Draw architecture diagram in Excalidraw — include backend, frontend, PostgreSQL, Redis, RabbitMQ, and Vercel/Railway — export as PNG to `/docs`
+- [ ] Write final README sections: architecture overview, key design decisions, how to run locally, environment variables reference
+- [ ] Add tradeoffs section — summarise the 5 architectural decisions from SYSTEM_DESIGN.md in plain English
+- [ ] Add links to live demo (Vercel), backend Swagger docs (Railway), and SYSTEM_DESIGN.md from README header
+
+**Checkpoint:** README tells the full story in under 5 minutes. Architecture diagram shows both backend and frontend. Someone unfamiliar with the project can run it locally using only the README.
+
+---
+
+### Day 28 — Thursday 15th May
+
+#### Theme: Final Review & Release
+
+- [ ] Read through entire backend codebase — remove dead code, TODO comments, console.logs
+- [ ] Read through entire frontend codebase — remove dead code, unused components, console.logs
+- [ ] Verify all tests pass on clean install (`npm ci && npm test` in both repos)
 - [ ] Verify `docker-compose up` still works cleanly from scratch
-- [ ] Verify live deployment is stable
+- [ ] Verify live deployment is stable — frontend and backend
 - [ ] Tag release `v1.0.0` on GitHub
-- [ ] Pin repository with description and topic tags (`nestjs`, `fintech`, `ledger`, `typescript`, `postgresql`)
+- [ ] Pin repository with description and topic tags (`nestjs`, `nextjs`, `fintech`, `ledger`, `typescript`, `postgresql`)
 - [ ] Update GitHub profile README to feature this project
 
 **Checkpoint:** Clean repo. All tests pass. Live URL works. `v1.0.0` tagged. Project is pinned and visible on GitHub profile.
@@ -323,10 +469,12 @@
 
 | Week | Theme | Key Deliverable |
 |------|-------|----------------|
-| Week 1 | Foundation & Auth | Running scaffold, tenant isolation, structured logging |
+| Week 1 | Foundation & Auth | Running scaffold, tenant isolation, API key rotation, structured logging |
 | Week 2 | Core Financial Logic | Bulletproof double-entry ledger, pessimistic locking, idempotency |
 | Week 3 | Event-Driven & Observability | Outbox pattern, DLQ, signed webhooks, full traceability |
-| Week 4 | Polish & Ship | Live URL, Swagger docs, clean README, `v1.0.0` tagged |
+| Week 4 | Frontend Foundation | Auth UI, tenant dashboard, wallet management, transfer flow |
+| Week 5 | Frontend Advanced Features | Transaction history, real-time updates, error handling, responsive design |
+| Week 6 | Polish & Ship | Rate limiting, Swagger, live deployment (Vercel + Railway), `v1.0.0` tagged |
 
 ---
 
@@ -340,4 +488,4 @@ If you finish a day early, write better tests or improve the README. The temptat
 
 ---
 
-*Last updated: 22nd March 2026*
+*Last updated: 31st March 2026*
