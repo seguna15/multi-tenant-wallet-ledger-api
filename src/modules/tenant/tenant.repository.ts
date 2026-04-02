@@ -1,7 +1,7 @@
 import { TenantStore } from "@common/cls/tenant-store.interface";
 import { PrismaService } from "@common/database/prisma.service";
 import { BaseRepository } from "@common/repositories/base.repository";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { Prisma, Tenant } from "@prisma/client";
 import { ClsService } from "nestjs-cls";
 
