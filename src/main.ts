@@ -3,13 +3,20 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { Logger } from 'nestjs-pino';
+import cookieParser from 'cookie-parser';
+import { corsConfig } from '@lib/config/cors.config';
+
+// add after app.useLogger(...)
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
   });
 
+  app.enableCors(corsConfig);
   app.useLogger(app.get(Logger));
+  app.use(cookieParser());
 
   app.setGlobalPrefix('api/v1');
 
@@ -30,6 +37,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth()
     .addApiKey({ type: 'apiKey', in: 'header', name: 'x-api-key' }, 'ApiKey')
+    .addApiKey({ type: 'apiKey', in: 'header', name: 'x-admin-key' }, 'AdminKey')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

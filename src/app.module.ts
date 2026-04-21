@@ -1,4 +1,5 @@
 import { PrismaModule } from '@common/database/prisma.module';
+import { AuthModule } from '@modules/auth/auth.module';
 import { TenantModule } from '@modules/tenant/tenant.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -28,7 +29,8 @@ import { LoggerModule } from 'nestjs-pino';
         mount: true, // automatically mount the middleware to capture context for each request
       }
     }),
-    TenantModule
+    TenantModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

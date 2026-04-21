@@ -1,6 +1,6 @@
 import { TenantStore } from "@common/cls/tenant-store.interface";
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
-import { Tenant } from "@prisma/client";
+import { Tenant } from "@prisma-client";
 import { ClsService } from "nestjs-cls";
 
 

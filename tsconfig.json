@@ -6,10 +6,10 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
@@ -17,11 +17,15 @@
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
+    "types": ["jest"],
     "paths": {
-      "@modules/*": ["src/modules/*"],
-      "@common/*": ["src/common/*"],
-      "@config/*": ["src/config/*"],
-      "@shared/*": ["shared/*"]
+      "@modules/*": ["./src/modules/*"],
+      "@common/*": ["./src/common/*"],
+      "@config/*": ["./src/config/*"],
+      "@shared/*": ["./shared/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@lib/*": ["./src/libs/*"],
+      "@prisma-client": ["./src/generated/prisma/client"]
     }
   },
   "ts-node": {

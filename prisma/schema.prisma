@@ -1,7 +1,8 @@
 // prisma/schema.prisma
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -21,6 +22,7 @@ model Tenant {
     updatedAt DateTime @updatedAt
 
     users User[]
+    refreshTokens RefreshToken[]
     wallets Wallet[]
     transfers Transfer[]
     journalEntries JournalEntry[]
@@ -30,16 +32,38 @@ model Tenant {
 model User {
     id String @id @default(uuid())
     tenantId String
-    email String
+    email String 
     passwordHash String
+    isActive Boolean @default(true)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     tenant Tenant @relation(fields: [tenantId], references: [id])
     wallets Wallet[]
+    refreshTokens RefreshToken[]
 
     @@unique([tenantId, email])
     @@index([tenantId])
+}
+
+model RefreshToken {
+    id String @id @default(uuid())
+    tenantId String
+    userId String
+    tokenHash String @unique
+    familyId  String
+    replacedByHash String?
+    revoked Boolean @default(false)
+    expiresAt DateTime
+    absoluteExpireAt DateTime
+    createdAt DateTime @default(now())
+
+    tenant Tenant @relation(fields: [tenantId], references: [id])
+    user User @relation(fields: [userId], references: [id])
+
+    @@index([userId])
+    @@index([tenantId])
+    @@index([familyId, tenantId])
 }
 
 model Wallet {

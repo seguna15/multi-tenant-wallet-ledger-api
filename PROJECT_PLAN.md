@@ -2,7 +2,7 @@
 
 **Author:** Adisa Oluwasegun Qasim  
 **Start Date:** 6th April 2026  
-**End Date:** 15th May 2026  
+**End Date:** 21st May 2026  
 **Hours/Day:** 4–5 hrs · Mon–Fri  
 **Stack:** NestJS (backend) · Next.js 15 (frontend) · PostgreSQL · Redis · RabbitMQ
 
@@ -79,20 +79,21 @@
 ### Day 4 — Wednesday 9th April
 **Theme: Auth Module**
 
-- [ ] Install and configure Passport.js
-- [ ] Implement JWT strategy for user authentication
-- [ ] Implement API key strategy for tenant system authentication
-- [ ] Build `JwtAuthGuard` and `ApiKeyGuard`
-- [ ] Build `CurrentTenant` decorator to extract tenantId from request context
-- [ ] Implement `POST /auth/login` endpoint (returns JWT)
-- [ ] Protect all existing endpoints with appropriate guard
-- [ ] Write unit tests for Auth service
+- [x] Install and configure Passport.js
+- [x] Implement JWT strategy for user authentication
+- [x] Implement API key strategy for tenant system authentication
+- [x] Build `JwtAuthGuard` and `ApiKeyGuard`
+- [x] Build `CurrentTenant` decorator to extract tenantId from request context
+- [x] Implement `POST /auth/login` endpoint (returns JWT)
+- [x] Protect all existing endpoints with appropriate guard
+- [x] Write unit tests for Auth service
 
 **Checkpoint:** Login returns JWT. API key validates correctly. Unauthenticated requests return 401. tenantId is available on every protected request.
 
 ---
 
-### Day 5 — Friday 10th April *(Thursday 10th is a bank holiday)*
+### Day 5 — Monday 20th April
+
 **Theme: Logging, Swagger & Week 1 Review**
 
 - [ ] Install and configure `nestjs-pino`
@@ -111,7 +112,8 @@
 
 ---
 
-### Day 6 — Monday 14th April
+### Day 6 — Tuesday 21st April
+
 **Theme: Wallet Module**
 
 - [ ] Generate Wallet NestJS module, service, controller
@@ -126,7 +128,7 @@
 
 ---
 
-### Day 7 — Tuesday 15th April
+### Day 7 — Wednesday 22nd April
 **Theme: Double-Entry Ledger Engine**
 
 - [ ] Generate Ledger NestJS module, service, controller
@@ -140,7 +142,7 @@
 
 ---
 
-### Day 8 — Wednesday 16th April
+### Day 8 — Thursday 23rd April
 **Theme: Transfer Service — Core**
 
 - [ ] Generate Transfer NestJS module, service, controller
@@ -156,7 +158,7 @@
 
 ---
 
-### Day 9 — Thursday 17th April
+### Day 9 — Friday 24th April
 **Theme: Transfer Service — Pessimistic Locking & Idempotency**
 
 - [ ] Add `SELECT FOR UPDATE` pessimistic lock on Wallet A balance read inside transfer transaction
@@ -170,7 +172,7 @@
 
 ---
 
-### Day 10 — Friday 18th April
+### Day 10 — Monday 27th April
 **Theme: Week 2 Tests & Review**
 
 - [ ] Write edge case unit tests: insufficient funds, same wallet transfer, zero amount, negative amount
@@ -184,13 +186,11 @@
 ---
 
 ## Week 3 — Event-Driven Layer & Observability
-*Note: Monday 21st April is Easter Monday — week starts Tuesday*
-
 *Goal: Production-grade async communication and full system observability*
 
 ---
 
-### Day 11 — Tuesday 22nd April
+### Day 11 — Tuesday 28th April
 **Theme: Outbox Pattern & RabbitMQ Publisher**
 
 - [ ] Install and configure `amqplib` for RabbitMQ connection
@@ -204,7 +204,7 @@
 
 ---
 
-### Day 12 — Wednesday 23rd April
+### Day 12 — Wednesday 29th April
 **Theme: Ledger Service Consumer & Dead Letter Queue**
 
 - [ ] Implement RabbitMQ consumer in Ledger Service — listens for `TRANSFER_INITIATED` events
@@ -218,7 +218,7 @@
 
 ---
 
-### Day 13 — Thursday 24th April
+### Day 13 — Thursday 30th April
 **Theme: Transfer Service Consumer & Notification Webhook**
 
 - [ ] Implement Transfer Service consumer — listens for `TRANSFER_COMPLETED`, updates Transfer record status
@@ -234,7 +234,7 @@
 
 ---
 
-### Day 14 — Friday 25th April
+### Day 14 — Friday 1st May
 **Theme: Health Checks, Graceful Shutdown & Observability Polish**
 
 - [ ] Install `@nestjs/terminus` and implement `/health` endpoint
@@ -254,7 +254,7 @@
 
 ---
 
-### Day 15 — Monday 28th April
+### Day 15 — Monday 4th May
 
 #### Theme: Next.js Project Setup & Auth UI
 
@@ -270,7 +270,7 @@
 
 ---
 
-### Day 16 — Tuesday 29th April
+### Day 16 — Tuesday 5th May
 
 #### Theme: Tenant Dashboard & API Key Management
 
@@ -284,7 +284,7 @@
 
 ---
 
-### Day 17 — Wednesday 30th April
+### Day 17 — Wednesday 6th May
 
 #### Theme: Wallet Management UI
 
@@ -298,7 +298,7 @@
 
 ---
 
-### Day 18 — Thursday 1st May
+### Day 18 — Thursday 7th May
 
 #### Theme: Transfer Flow UI
 
@@ -312,7 +312,7 @@
 
 ---
 
-### Day 19 — Friday 2nd May
+### Day 19 — Friday 8th May
 
 #### Theme: Week 4 Review & Integration
 
@@ -332,7 +332,7 @@
 
 ---
 
-### Day 20 — Monday 5th May
+### Day 20 — Monday 11th May
 
 #### Theme: Transaction History
 
@@ -346,7 +346,7 @@
 
 ---
 
-### Day 21 — Tuesday 6th May
+### Day 21 — Tuesday 12th May
 
 #### Theme: Real-Time Transfer Status
 
@@ -359,7 +359,7 @@
 
 ---
 
-### Day 22 — Wednesday 7th May
+### Day 22 — Wednesday 13th May
 
 #### Theme: Error Handling, Loading States & Responsive Design
 
@@ -373,7 +373,7 @@
 
 ---
 
-### Day 23 — Thursday 8th May
+### Day 23 — Thursday 14th May
 
 #### Theme: Week 5 Review & Frontend Test Coverage
 
@@ -393,7 +393,7 @@
 
 ---
 
-### Day 24 — Friday 9th May
+### Day 24 — Friday 15th May
 
 #### Theme: Redis Rate Limiting & Backend Error Handling
 
@@ -407,7 +407,7 @@
 
 ---
 
-### Day 25 — Monday 12th May
+### Day 25 — Monday 18th May
 
 #### Theme: Swagger Polish
 
@@ -420,7 +420,7 @@
 
 ---
 
-### Day 26 — Tuesday 13th May
+### Day 26 — Tuesday 19th May
 
 #### Theme: Deployment
 
@@ -435,7 +435,7 @@
 
 ---
 
-### Day 27 — Wednesday 14th May
+### Day 27 — Wednesday 20th May
 
 #### Theme: README & Architecture Diagram
 
@@ -448,7 +448,7 @@
 
 ---
 
-### Day 28 — Thursday 15th May
+### Day 28 — Thursday 21st May
 
 #### Theme: Final Review & Release
 
@@ -488,4 +488,4 @@ If you finish a day early, write better tests or improve the README. The temptat
 
 ---
 
-*Last updated: 31st March 2026*
+*Last updated: 20th April 2026*

@@ -1,82 +1,108 @@
-import { Body, Controller, Delete, HttpCode, HttpStatus, Param, ParseUUIDPipe, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, HttpCode, HttpStatus, Post, Patch, UseGuards, Param } from "@nestjs/common";
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { TenantService } from "@modules/tenant/tenant.service";
 import { CreateTenantDto, UpdateTenantDto } from "@modules/tenant/dto";
 import { TenantClsGuard } from "@common/guards/tenant-cls.guard";
+import { RotateTenantWebhookSecretResult } from "@modules/tenant/types/tenant.types";
+import { ApiKeyGuard } from "@common/guards/api-key.guard";
+import { CurrentTenant } from "@common/decorators/current-tenant.decorator";
+import { AdminGuard } from "@common/guards/admin.guard";
 
 
-@ApiTags("Tenants")
-@Controller("tenants")
+
+@ApiTags('Tenants')
+@Controller('tenants')
 export class TenantController {
-   constructor(private readonly tenantService: TenantService) {}
+  constructor(private readonly tenantService: TenantService) {}
 
-
-   @Post()
-   @ApiOperation({
+  @Post()
+  @ApiOperation({
     summary: 'Register a new tenant',
-    description: 'Returns the API key once.. It cannot be retrieved again. Store it immediately'
-   })
-   @HttpCode(HttpStatus.CREATED)
-   @ApiCreatedResponse({
+    description:
+      'Returns the API key once.. It cannot be retrieved again. Store it immediately',
+  })
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({
     description: 'Tenant registered api key returned once',
-    })
-    async registerSingleTenant(
-        @Body() dto: CreateTenantDto
-    ) {
-        return this.tenantService.createSingleTenant(dto);
-    }
+  })
+  async registerSingleTenant(@Body() dto: CreateTenantDto) {
+    return this.tenantService.createSingleTenant(dto);
+  }
 
-    @Patch(":id")
-    @UseGuards(/*AuthGuard('headerapikey'),*/ TenantClsGuard )
-    @ApiSecurity("x-api-key")
-    @ApiOperation({
-        summary: 'Update tenant details',
-        description: 'Updates tenant details. API key cannot be updated via this endpoint'
-    })
-    @HttpCode(HttpStatus.OK)
-    @ApiOkResponse({
-        description: 'Tenant updated successfully',
-    })
-    async updateSingleTenant(
-        @Param("id", ParseUUIDPipe) id: string,
-        @Body() dto: UpdateTenantDto
-    ) {
-        // For simplicity we are not allowing API key rotation for now, but this could be implemented in the future if needed
-        return this.tenantService.updateSingleTenant(id, dto);
-    }
+  @Patch()
+  @UseGuards(ApiKeyGuard, TenantClsGuard)
+  @ApiSecurity('x-api-key')
+  @ApiOperation({
+    summary: 'Update tenant details',
+    description:
+      'Updates the authenticated tenant. Tenant is identified by API key — no ID needed in the URL.',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ description: 'Tenant updated successfully' })
+  async updateSingleTenant(
+    @CurrentTenant('id') id: string,
+    @Body() dto: UpdateTenantDto,
+  ) {
+    return this.tenantService.updateSingleTenant(id, dto);
+  }
 
-    @Delete(":id")
-    @UseGuards(/*AuthGuard('headerapikey'),*/ TenantClsGuard )
-    @ApiSecurity("x-api-key")
-    @HttpCode(HttpStatus.NO_CONTENT)
-    @ApiOperation({
-        summary: 'Soft delete a tenant',
-        description: 'Soft deletes a tenant by setting isActive to false. This allows us to keep historical data for the tenant while preventing any new activity.'
-    })
-    @ApiOkResponse({
-        description: 'Tenant soft deleted successfully',
-    })
-    async softDeleteSingleTenant(
-        @Param("id", ParseUUIDPipe) id: string,
-    ) {
-        await this.tenantService.softDeleteSingleTenant(id);
-        return;
-    }
+  @Delete()
+  @UseGuards(ApiKeyGuard, TenantClsGuard)
+  @ApiSecurity('x-api-key')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Deactivate tenant',
+    description:
+      'Soft deletes the authenticated tenant. Tenant is identified by API key.',
+  })
+  async softDeleteSingleTenant(@CurrentTenant('id') id: string) {
+    await this.tenantService.softDeleteSingleTenant(id);
+  }
 
-    @Post(":id/rotate-api-key")
-    @UseGuards(/*AuthGuard('headerapikey'),*/ TenantClsGuard )
-    @ApiSecurity("x-api-key")
-    @HttpCode(HttpStatus.OK)
-    @ApiOperation({
-        summary: 'Rotate tenant API key',
-        description: 'Generates a new API key for the tenant. The old API key will no longer work immediately after rotation.'
-    })
-    @ApiOkResponse({
-        description: 'Tenant API key rotated successfully, new API key returned',
-    })
-    async rotateTenantApiKey(
-        @Param("id", ParseUUIDPipe) id: string,
-    ) {
-        return this.tenantService.rotateTenantApiKey(id);
-    }
+  @Post('rotate-api-key')
+  @UseGuards(ApiKeyGuard, TenantClsGuard)
+  @ApiSecurity('x-api-key')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Rotate tenant API key',
+    description:
+      'Generates a new API key. The old key stops working immediately.',
+  })
+  @ApiOkResponse({
+    description: 'New API key returned once — store it immediately.',
+  })
+  async rotateTenantApiKey(@CurrentTenant('id') id: string) {
+    return this.tenantService.rotateTenantApiKey(id);
+  }
+
+  @Post('rotate-webhook-secret')
+  @UseGuards(ApiKeyGuard, TenantClsGuard)
+  @ApiSecurity('x-api-key')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary:
+      'Rotate webhook secret — invalidates current secret, returns new one once',
+  })
+  @ApiOkResponse({
+    description:
+      'New webhook secret returned. Store it immediately — it cannot be retrieved again.',
+  })
+  async rotateWebhookSecret(
+    @CurrentTenant('id') id: string,
+  ): Promise<RotateTenantWebhookSecretResult> {
+    return this.tenantService.rotateTenantWebhookSecret(id);
+  }
+
+  @Patch(':id/activate')
+  @UseGuards(AdminGuard)
+  @ApiSecurity('x-admin-key')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Reactivate a soft-deleted tenant',
+    description: 'Admin-only. Pass the admin key in the x-admin-key header.',
+  })
+  @ApiOkResponse({ description: 'Tenant reactivated successfully' })
+  async activateSingleTenant(@Param('id') id: string) {
+    return this.tenantService.activateSingleTenant(id);
+  }
 }

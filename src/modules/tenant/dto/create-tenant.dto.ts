@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsOptional, IsString, IsUrl, MaxLength, Min, MinLength } from "class-validator";
+import { IsOptional, IsString, IsUrl, MaxLength, MinLength } from "class-validator";
 
 
 export class CreateTenantDto {
@@ -10,7 +10,7 @@ export class CreateTenantDto {
     @IsString()
     @MinLength(2)
     @MaxLength(100)
-    name: string;
+    name!: string;
 
     @ApiPropertyOptional({
         description: "The webhook URL for the tenant",
@@ -21,11 +21,9 @@ export class CreateTenantDto {
     webhookUrl?: string;
 
     @ApiPropertyOptional({
-        description: "The webhook secret for the tenant",
-        example: "my-webhook-secret",
+        description: "Whether the tenant is active. Defaults to true.",
+        example: true,
     })
-    @IsOptional()
-    @IsString()
-    @MinLength(32)
-    webhookSecret?: string;
+    @IsOptional()  
+    isActive?: boolean; // Optional, defaults to true in the service layer
 }

@@ -1,6 +1,6 @@
 import { TenantStore } from "@common/cls/tenant-store.interface";
+import { RequestUser } from "@modules/auth/types/auth.types";
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
-import { User } from "@prisma/client";
 import { ClsService } from "nestjs-cls";
 
 
@@ -10,10 +10,10 @@ export class UserClsGuard implements CanActivate {
 
     canActivate(context: ExecutionContext): boolean {
         const request = context.switchToHttp().getRequest();
-        const user: User = request.user; //populated by passport-jwt
+        const user: RequestUser = request.user; //populated by passport-jwt
 
-        this.clsService.set('userId', user.id);
-        
+        this.clsService.set('userId', user.userId);
+      
         return true;
     }
 }

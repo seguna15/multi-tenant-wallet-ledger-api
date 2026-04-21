@@ -1,5 +1,4 @@
 import * as crypto from "crypto";
-import * as argon2 from "argon2";
 
 const API_KEY_PREFIX = "lapi_";
 
@@ -11,18 +10,18 @@ export function generateApiKey(): string {
     return `${API_KEY_PREFIX}${crypto.randomBytes(32).toString("hex")}`;
 }
 
-/**
- * Hashes an API key with argon2id before storage.
- * Never store the plain key.
- */
+/** SHA-256 of the plain key — deterministic, safe for DB unique lookup. */
 export function hashApiKey(plainKey: string): Promise<string> {
-    return argon2.hash(plainKey, {type: argon2.argon2id});
+    return Promise.resolve(crypto.createHash("sha256").update(plainKey).digest("hex"));
 }   
 
-/**
- * Verifies a plain API key against its stored hash.
- * Used in the API key Passport strategy.
- */
-export function verifyApiKey(plainKey: string, hash: string): Promise<boolean> {
-    return argon2.verify(hash, plainKey);
+/** Same hash used in strategy validation. */
+export function verifyApiKey(plainKey: string, hash: string): boolean {
+    const computed  = crypto.createHash("sha256").update(plainKey).digest("hex");
+    return crypto.timingSafeEqual(Buffer.from(computed), Buffer.from(hash));
+}
+
+/** Generate webhook secret. */
+export function generateWebhookSecret(): string {
+    return crypto.randomBytes(32).toString("hex");
 }

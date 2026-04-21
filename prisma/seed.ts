@@ -1,5 +1,5 @@
 import "dotenv/config";
-import {PrismaClient, Currency} from "@prisma/client";
+import {PrismaClient, Currency} from "@prisma-client";
 import {PrismaPg} from "@prisma/adapter-pg";
 import * as argon2 from "argon2";
 import * as crypto from "crypto";
