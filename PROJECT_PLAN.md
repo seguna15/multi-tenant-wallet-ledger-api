@@ -96,12 +96,12 @@
 
 **Theme: Logging, Swagger & Week 1 Review**
 
-- [ ] Install and configure `nestjs-pino`
-- [ ] Write correlation ID middleware (generates UUID per request, attaches to logger context)
-- [ ] Ensure all log lines include: `correlationId`, `tenantId`, `level`, `timestamp`, `msg`
-- [ ] Set up Swagger with `@nestjs/swagger` — document all existing endpoints
-- [ ] Write README skeleton: project title, problem statement, getting started section
-- [ ] Review Week 1 — fix anything broken before moving on
+- [x] Install and configure `nestjs-pino`
+- [x] Write correlation ID middleware (generates UUID per request, attaches to logger context)
+- [x] Ensure all log lines include: `correlationId`, `tenantId`, `level`, `timestamp`, `msg`
+- [x] Set up Swagger with `@nestjs/swagger` — document all existing endpoints
+- [x] Write README skeleton: project title, problem statement, getting started section
+- [x] Review Week 1 — fix anything broken before moving on
 
 **Checkpoint:** Every request produces structured JSON logs. Swagger UI accessible at `/api/docs`. README explains how to run the project locally.
 
