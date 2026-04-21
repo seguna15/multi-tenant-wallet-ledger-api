@@ -101,7 +101,6 @@ export class AuthController {
     @CurrentUser() user: RequestUser,
     @Res({ passthrough: true }) res: Response,
   ): Promise<void> {
-    console.log(`Logging out all sessions for user ${user.userId} in tenant ${user.tenantId}`);
     await this.authService.logoutAll(user.userId);
     this.clearRefreshCookie(res);
   }

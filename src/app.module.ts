@@ -1,7 +1,8 @@
 import { PrismaModule } from '@common/database/prisma.module';
+import { CorrelationIdMiddleware } from '@common/middleware/correlation-id.middleware';
 import { AuthModule } from '@modules/auth/auth.module';
 import { TenantModule } from '@modules/tenant/tenant.module';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ClsModule } from 'nestjs-cls';
 import { LoggerModule } from 'nestjs-pino';
@@ -16,11 +17,18 @@ import { LoggerModule } from 'nestjs-pino';
     }),
     LoggerModule.forRoot({
       pinoHttp: {
-        transport: process.env.NODE_ENV !== 'development' ? {
-          target: 'pino-pretty',
-        } : undefined,
+        transport:
+          process.env.NODE_ENV === 'development'
+            ? { target: 'pino-pretty' }
+            : undefined,
         autoLogging: true,
-        redact: ['req.headers.authorization', 'req.headers["x-api-key"]'],
+        redact: [
+          'req.headers.authorization',
+          'req.headers["x-api-key"]',
+          'req.headers["x-admin-key"]',
+          'req.headers[cookie]',
+          'res.headers["set-cookie"]',
+        ],
       },
     }),
     ClsModule.forRoot({
@@ -35,4 +43,8 @@ import { LoggerModule } from 'nestjs-pino';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+      consumer.apply(CorrelationIdMiddleware).forRoutes('*');
+  }
+}
