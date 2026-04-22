@@ -116,13 +116,13 @@
 
 **Theme: Wallet Module**
 
-- [ ] Generate Wallet NestJS module, service, controller
-- [ ] Implement `POST /wallets` — create wallet (scoped to tenant + user)
-- [ ] Implement `GET /wallets/:id` — get wallet details
-- [ ] Implement `GET /wallets/:id/balance` — balance read via Redis cache first, DB on miss
-- [ ] Add Redis caching layer for balance reads with TTL
-- [ ] Enforce tenant scoping on all wallet queries
-- [ ] Write unit tests for Wallet service
+- [x] Generate Wallet NestJS module, service, controller
+- [x] Implement `POST /wallets` — create wallet (scoped to tenant + user)
+- [x] Implement `GET /wallets/:id` — get wallet details
+- [x] Implement `GET /wallets/:id/balance` — balance read via Redis cache first, DB on miss
+- [x] Add Redis caching layer for balance reads with TTL
+- [x] Enforce tenant scoping on all wallet queries
+- [x] Write unit tests for Wallet service
 
 **Checkpoint:** Wallets can be created per user per tenant. Balance endpoint returns correctly. Cache hit/miss logs are visible in structured logs.
 

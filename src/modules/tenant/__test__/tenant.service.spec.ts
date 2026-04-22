@@ -123,7 +123,6 @@ describe('TenantService', () => {
       await service.createSingleTenant({
         name: 'Acme Corp',
         webhookUrl: 'https://acme.com/webhook',
-        webhookSecret: 'secret',
       });
 
       expect(repo.createSingleTenant).toHaveBeenCalledWith(
