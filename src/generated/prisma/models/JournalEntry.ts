@@ -27,11 +27,11 @@ export type AggregateJournalEntry = {
 }
 
 export type JournalEntryAvgAggregateOutputType = {
-  amount: runtime.Decimal | null
+  amount: number | null
 }
 
 export type JournalEntrySumAggregateOutputType = {
-  amount: runtime.Decimal | null
+  amount: bigint | null
 }
 
 export type JournalEntryMinAggregateOutputType = {
@@ -40,7 +40,7 @@ export type JournalEntryMinAggregateOutputType = {
   walletId: string | null
   transferId: string | null
   type: $Enums.JournalEntryType | null
-  amount: runtime.Decimal | null
+  amount: bigint | null
   currency: $Enums.Currency | null
   createdAt: Date | null
 }
@@ -51,7 +51,7 @@ export type JournalEntryMaxAggregateOutputType = {
   walletId: string | null
   transferId: string | null
   type: $Enums.JournalEntryType | null
-  amount: runtime.Decimal | null
+  amount: bigint | null
   currency: $Enums.Currency | null
   createdAt: Date | null
 }
@@ -203,7 +203,7 @@ export type JournalEntryGroupByOutputType = {
   walletId: string
   transferId: string
   type: $Enums.JournalEntryType
-  amount: runtime.Decimal
+  amount: bigint
   currency: $Enums.Currency
   createdAt: Date
   _count: JournalEntryCountAggregateOutputType | null
@@ -237,7 +237,7 @@ export type JournalEntryWhereInput = {
   walletId?: Prisma.StringFilter<"JournalEntry"> | string
   transferId?: Prisma.StringFilter<"JournalEntry"> | string
   type?: Prisma.EnumJournalEntryTypeFilter<"JournalEntry"> | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFilter<"JournalEntry"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFilter<"JournalEntry"> | bigint | number
   currency?: Prisma.EnumCurrencyFilter<"JournalEntry"> | $Enums.Currency
   createdAt?: Prisma.DateTimeFilter<"JournalEntry"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -268,7 +268,7 @@ export type JournalEntryWhereUniqueInput = Prisma.AtLeast<{
   walletId?: Prisma.StringFilter<"JournalEntry"> | string
   transferId?: Prisma.StringFilter<"JournalEntry"> | string
   type?: Prisma.EnumJournalEntryTypeFilter<"JournalEntry"> | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFilter<"JournalEntry"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFilter<"JournalEntry"> | bigint | number
   currency?: Prisma.EnumCurrencyFilter<"JournalEntry"> | $Enums.Currency
   createdAt?: Prisma.DateTimeFilter<"JournalEntry"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -301,7 +301,7 @@ export type JournalEntryScalarWhereWithAggregatesInput = {
   walletId?: Prisma.StringWithAggregatesFilter<"JournalEntry"> | string
   transferId?: Prisma.StringWithAggregatesFilter<"JournalEntry"> | string
   type?: Prisma.EnumJournalEntryTypeWithAggregatesFilter<"JournalEntry"> | $Enums.JournalEntryType
-  amount?: Prisma.DecimalWithAggregatesFilter<"JournalEntry"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntWithAggregatesFilter<"JournalEntry"> | bigint | number
   currency?: Prisma.EnumCurrencyWithAggregatesFilter<"JournalEntry"> | $Enums.Currency
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"JournalEntry"> | Date | string
 }
@@ -309,7 +309,7 @@ export type JournalEntryScalarWhereWithAggregatesInput = {
 export type JournalEntryCreateInput = {
   id?: string
   type: $Enums.JournalEntryType
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: bigint | number
   currency: $Enums.Currency
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutJournalEntriesInput
@@ -323,7 +323,7 @@ export type JournalEntryUncheckedCreateInput = {
   walletId: string
   transferId: string
   type: $Enums.JournalEntryType
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: bigint | number
   currency: $Enums.Currency
   createdAt?: Date | string
 }
@@ -331,7 +331,7 @@ export type JournalEntryUncheckedCreateInput = {
 export type JournalEntryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJournalEntryTypeFieldUpdateOperationsInput | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutJournalEntriesNestedInput
@@ -345,7 +345,7 @@ export type JournalEntryUncheckedUpdateInput = {
   walletId?: Prisma.StringFieldUpdateOperationsInput | string
   transferId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJournalEntryTypeFieldUpdateOperationsInput | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -356,7 +356,7 @@ export type JournalEntryCreateManyInput = {
   walletId: string
   transferId: string
   type: $Enums.JournalEntryType
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: bigint | number
   currency: $Enums.Currency
   createdAt?: Date | string
 }
@@ -364,7 +364,7 @@ export type JournalEntryCreateManyInput = {
 export type JournalEntryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJournalEntryTypeFieldUpdateOperationsInput | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -375,7 +375,7 @@ export type JournalEntryUncheckedUpdateManyInput = {
   walletId?: Prisma.StringFieldUpdateOperationsInput | string
   transferId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJournalEntryTypeFieldUpdateOperationsInput | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -564,7 +564,7 @@ export type EnumJournalEntryTypeFieldUpdateOperationsInput = {
 export type JournalEntryCreateWithoutTenantInput = {
   id?: string
   type: $Enums.JournalEntryType
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: bigint | number
   currency: $Enums.Currency
   createdAt?: Date | string
   wallet: Prisma.WalletCreateNestedOneWithoutJournalEntriesInput
@@ -576,7 +576,7 @@ export type JournalEntryUncheckedCreateWithoutTenantInput = {
   walletId: string
   transferId: string
   type: $Enums.JournalEntryType
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: bigint | number
   currency: $Enums.Currency
   createdAt?: Date | string
 }
@@ -616,7 +616,7 @@ export type JournalEntryScalarWhereInput = {
   walletId?: Prisma.StringFilter<"JournalEntry"> | string
   transferId?: Prisma.StringFilter<"JournalEntry"> | string
   type?: Prisma.EnumJournalEntryTypeFilter<"JournalEntry"> | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFilter<"JournalEntry"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFilter<"JournalEntry"> | bigint | number
   currency?: Prisma.EnumCurrencyFilter<"JournalEntry"> | $Enums.Currency
   createdAt?: Prisma.DateTimeFilter<"JournalEntry"> | Date | string
 }
@@ -624,7 +624,7 @@ export type JournalEntryScalarWhereInput = {
 export type JournalEntryCreateWithoutWalletInput = {
   id?: string
   type: $Enums.JournalEntryType
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: bigint | number
   currency: $Enums.Currency
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutJournalEntriesInput
@@ -636,7 +636,7 @@ export type JournalEntryUncheckedCreateWithoutWalletInput = {
   tenantId: string
   transferId: string
   type: $Enums.JournalEntryType
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: bigint | number
   currency: $Enums.Currency
   createdAt?: Date | string
 }
@@ -670,7 +670,7 @@ export type JournalEntryUpdateManyWithWhereWithoutWalletInput = {
 export type JournalEntryCreateWithoutTransferInput = {
   id?: string
   type: $Enums.JournalEntryType
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: bigint | number
   currency: $Enums.Currency
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutJournalEntriesInput
@@ -682,7 +682,7 @@ export type JournalEntryUncheckedCreateWithoutTransferInput = {
   tenantId: string
   walletId: string
   type: $Enums.JournalEntryType
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: bigint | number
   currency: $Enums.Currency
   createdAt?: Date | string
 }
@@ -718,7 +718,7 @@ export type JournalEntryCreateManyTenantInput = {
   walletId: string
   transferId: string
   type: $Enums.JournalEntryType
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: bigint | number
   currency: $Enums.Currency
   createdAt?: Date | string
 }
@@ -726,7 +726,7 @@ export type JournalEntryCreateManyTenantInput = {
 export type JournalEntryUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJournalEntryTypeFieldUpdateOperationsInput | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   wallet?: Prisma.WalletUpdateOneRequiredWithoutJournalEntriesNestedInput
@@ -738,7 +738,7 @@ export type JournalEntryUncheckedUpdateWithoutTenantInput = {
   walletId?: Prisma.StringFieldUpdateOperationsInput | string
   transferId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJournalEntryTypeFieldUpdateOperationsInput | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -748,7 +748,7 @@ export type JournalEntryUncheckedUpdateManyWithoutTenantInput = {
   walletId?: Prisma.StringFieldUpdateOperationsInput | string
   transferId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJournalEntryTypeFieldUpdateOperationsInput | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -758,7 +758,7 @@ export type JournalEntryCreateManyWalletInput = {
   tenantId: string
   transferId: string
   type: $Enums.JournalEntryType
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: bigint | number
   currency: $Enums.Currency
   createdAt?: Date | string
 }
@@ -766,7 +766,7 @@ export type JournalEntryCreateManyWalletInput = {
 export type JournalEntryUpdateWithoutWalletInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJournalEntryTypeFieldUpdateOperationsInput | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutJournalEntriesNestedInput
@@ -778,7 +778,7 @@ export type JournalEntryUncheckedUpdateWithoutWalletInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   transferId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJournalEntryTypeFieldUpdateOperationsInput | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -788,7 +788,7 @@ export type JournalEntryUncheckedUpdateManyWithoutWalletInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   transferId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJournalEntryTypeFieldUpdateOperationsInput | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -798,7 +798,7 @@ export type JournalEntryCreateManyTransferInput = {
   tenantId: string
   walletId: string
   type: $Enums.JournalEntryType
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: bigint | number
   currency: $Enums.Currency
   createdAt?: Date | string
 }
@@ -806,7 +806,7 @@ export type JournalEntryCreateManyTransferInput = {
 export type JournalEntryUpdateWithoutTransferInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJournalEntryTypeFieldUpdateOperationsInput | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutJournalEntriesNestedInput
@@ -818,7 +818,7 @@ export type JournalEntryUncheckedUpdateWithoutTransferInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   walletId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJournalEntryTypeFieldUpdateOperationsInput | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -828,7 +828,7 @@ export type JournalEntryUncheckedUpdateManyWithoutTransferInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   walletId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJournalEntryTypeFieldUpdateOperationsInput | $Enums.JournalEntryType
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -918,7 +918,7 @@ export type $JournalEntryPayload<ExtArgs extends runtime.Types.Extensions.Intern
     walletId: string
     transferId: string
     type: $Enums.JournalEntryType
-    amount: runtime.Decimal
+    amount: bigint
     currency: $Enums.Currency
     createdAt: Date
   }, ExtArgs["result"]["journalEntry"]>
@@ -1352,7 +1352,7 @@ export interface JournalEntryFieldRefs {
   readonly walletId: Prisma.FieldRef<"JournalEntry", 'String'>
   readonly transferId: Prisma.FieldRef<"JournalEntry", 'String'>
   readonly type: Prisma.FieldRef<"JournalEntry", 'JournalEntryType'>
-  readonly amount: Prisma.FieldRef<"JournalEntry", 'Decimal'>
+  readonly amount: Prisma.FieldRef<"JournalEntry", 'BigInt'>
   readonly currency: Prisma.FieldRef<"JournalEntry", 'Currency'>
   readonly createdAt: Prisma.FieldRef<"JournalEntry", 'DateTime'>
 }

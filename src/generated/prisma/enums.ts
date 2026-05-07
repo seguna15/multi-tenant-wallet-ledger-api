@@ -9,6 +9,23 @@
 * 🟢 You can import this file directly.
 */
 
+export const TenantType = {
+  SYSTEM: 'SYSTEM',
+  CLIENT: 'CLIENT'
+} as const
+
+export type TenantType = (typeof TenantType)[keyof typeof TenantType]
+
+
+export const UserRole = {
+  SYSTEM_ADMIN: 'SYSTEM_ADMIN',
+  TENANT_ADMIN: 'TENANT_ADMIN',
+  CUSTOMER: 'CUSTOMER'
+} as const
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+
 export const Currency = {
   USD: 'USD',
   EUR: 'EUR',

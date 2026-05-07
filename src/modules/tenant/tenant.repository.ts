@@ -75,10 +75,10 @@ export class TenantRepository extends BaseRepository {
     });
   }
 
-  activateSingleTenant(id: string): Promise<Tenant> {
+  setTenantActive(id: string, isActive: boolean): Promise<Tenant> {
     return this.prisma.tenant.update({
       where: { id },
-      data: { isActive: true },
+      data: { isActive },
     });
   }
 }

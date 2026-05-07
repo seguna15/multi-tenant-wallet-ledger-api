@@ -27,12 +27,14 @@ export type AggregateTransfer = {
 }
 
 export type TransferAvgAggregateOutputType = {
-  amount: runtime.Decimal | null
+  fromAmount: number | null
+  toAmount: number | null
   fxRate: runtime.Decimal | null
 }
 
 export type TransferSumAggregateOutputType = {
-  amount: runtime.Decimal | null
+  fromAmount: bigint | null
+  toAmount: bigint | null
   fxRate: runtime.Decimal | null
 }
 
@@ -41,8 +43,10 @@ export type TransferMinAggregateOutputType = {
   tenantId: string | null
   walletFromId: string | null
   walletToId: string | null
-  amount: runtime.Decimal | null
-  currency: $Enums.Currency | null
+  fromAmount: bigint | null
+  toAmount: bigint | null
+  fromCurrency: $Enums.Currency | null
+  toCurrency: $Enums.Currency | null
   status: $Enums.TransferStatus | null
   fxRate: runtime.Decimal | null
   idempotencyKey: string | null
@@ -55,8 +59,10 @@ export type TransferMaxAggregateOutputType = {
   tenantId: string | null
   walletFromId: string | null
   walletToId: string | null
-  amount: runtime.Decimal | null
-  currency: $Enums.Currency | null
+  fromAmount: bigint | null
+  toAmount: bigint | null
+  fromCurrency: $Enums.Currency | null
+  toCurrency: $Enums.Currency | null
   status: $Enums.TransferStatus | null
   fxRate: runtime.Decimal | null
   idempotencyKey: string | null
@@ -69,8 +75,10 @@ export type TransferCountAggregateOutputType = {
   tenantId: number
   walletFromId: number
   walletToId: number
-  amount: number
-  currency: number
+  fromAmount: number
+  toAmount: number
+  fromCurrency: number
+  toCurrency: number
   status: number
   fxRate: number
   idempotencyKey: number
@@ -81,12 +89,14 @@ export type TransferCountAggregateOutputType = {
 
 
 export type TransferAvgAggregateInputType = {
-  amount?: true
+  fromAmount?: true
+  toAmount?: true
   fxRate?: true
 }
 
 export type TransferSumAggregateInputType = {
-  amount?: true
+  fromAmount?: true
+  toAmount?: true
   fxRate?: true
 }
 
@@ -95,8 +105,10 @@ export type TransferMinAggregateInputType = {
   tenantId?: true
   walletFromId?: true
   walletToId?: true
-  amount?: true
-  currency?: true
+  fromAmount?: true
+  toAmount?: true
+  fromCurrency?: true
+  toCurrency?: true
   status?: true
   fxRate?: true
   idempotencyKey?: true
@@ -109,8 +121,10 @@ export type TransferMaxAggregateInputType = {
   tenantId?: true
   walletFromId?: true
   walletToId?: true
-  amount?: true
-  currency?: true
+  fromAmount?: true
+  toAmount?: true
+  fromCurrency?: true
+  toCurrency?: true
   status?: true
   fxRate?: true
   idempotencyKey?: true
@@ -123,8 +137,10 @@ export type TransferCountAggregateInputType = {
   tenantId?: true
   walletFromId?: true
   walletToId?: true
-  amount?: true
-  currency?: true
+  fromAmount?: true
+  toAmount?: true
+  fromCurrency?: true
+  toCurrency?: true
   status?: true
   fxRate?: true
   idempotencyKey?: true
@@ -224,8 +240,10 @@ export type TransferGroupByOutputType = {
   tenantId: string
   walletFromId: string
   walletToId: string
-  amount: runtime.Decimal
-  currency: $Enums.Currency
+  fromAmount: bigint
+  toAmount: bigint
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status: $Enums.TransferStatus
   fxRate: runtime.Decimal
   idempotencyKey: string | null
@@ -261,8 +279,10 @@ export type TransferWhereInput = {
   tenantId?: Prisma.StringFilter<"Transfer"> | string
   walletFromId?: Prisma.StringFilter<"Transfer"> | string
   walletToId?: Prisma.StringFilter<"Transfer"> | string
-  amount?: Prisma.DecimalFilter<"Transfer"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFilter<"Transfer"> | $Enums.Currency
+  fromAmount?: Prisma.BigIntFilter<"Transfer"> | bigint | number
+  toAmount?: Prisma.BigIntFilter<"Transfer"> | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFilter<"Transfer"> | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFilter<"Transfer"> | $Enums.Currency
   status?: Prisma.EnumTransferStatusFilter<"Transfer"> | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFilter<"Transfer"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.StringNullableFilter<"Transfer"> | string | null
@@ -280,8 +300,10 @@ export type TransferOrderByWithRelationInput = {
   tenantId?: Prisma.SortOrder
   walletFromId?: Prisma.SortOrder
   walletToId?: Prisma.SortOrder
-  amount?: Prisma.SortOrder
-  currency?: Prisma.SortOrder
+  fromAmount?: Prisma.SortOrder
+  toAmount?: Prisma.SortOrder
+  fromCurrency?: Prisma.SortOrder
+  toCurrency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   fxRate?: Prisma.SortOrder
   idempotencyKey?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -303,8 +325,10 @@ export type TransferWhereUniqueInput = Prisma.AtLeast<{
   tenantId?: Prisma.StringFilter<"Transfer"> | string
   walletFromId?: Prisma.StringFilter<"Transfer"> | string
   walletToId?: Prisma.StringFilter<"Transfer"> | string
-  amount?: Prisma.DecimalFilter<"Transfer"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFilter<"Transfer"> | $Enums.Currency
+  fromAmount?: Prisma.BigIntFilter<"Transfer"> | bigint | number
+  toAmount?: Prisma.BigIntFilter<"Transfer"> | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFilter<"Transfer"> | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFilter<"Transfer"> | $Enums.Currency
   status?: Prisma.EnumTransferStatusFilter<"Transfer"> | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFilter<"Transfer"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"Transfer"> | Date | string
@@ -321,8 +345,10 @@ export type TransferOrderByWithAggregationInput = {
   tenantId?: Prisma.SortOrder
   walletFromId?: Prisma.SortOrder
   walletToId?: Prisma.SortOrder
-  amount?: Prisma.SortOrder
-  currency?: Prisma.SortOrder
+  fromAmount?: Prisma.SortOrder
+  toAmount?: Prisma.SortOrder
+  fromCurrency?: Prisma.SortOrder
+  toCurrency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   fxRate?: Prisma.SortOrder
   idempotencyKey?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -343,8 +369,10 @@ export type TransferScalarWhereWithAggregatesInput = {
   tenantId?: Prisma.StringWithAggregatesFilter<"Transfer"> | string
   walletFromId?: Prisma.StringWithAggregatesFilter<"Transfer"> | string
   walletToId?: Prisma.StringWithAggregatesFilter<"Transfer"> | string
-  amount?: Prisma.DecimalWithAggregatesFilter<"Transfer"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyWithAggregatesFilter<"Transfer"> | $Enums.Currency
+  fromAmount?: Prisma.BigIntWithAggregatesFilter<"Transfer"> | bigint | number
+  toAmount?: Prisma.BigIntWithAggregatesFilter<"Transfer"> | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyWithAggregatesFilter<"Transfer"> | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyWithAggregatesFilter<"Transfer"> | $Enums.Currency
   status?: Prisma.EnumTransferStatusWithAggregatesFilter<"Transfer"> | $Enums.TransferStatus
   fxRate?: Prisma.DecimalWithAggregatesFilter<"Transfer"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.StringNullableWithAggregatesFilter<"Transfer"> | string | null
@@ -354,8 +382,10 @@ export type TransferScalarWhereWithAggregatesInput = {
 
 export type TransferCreateInput = {
   id?: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -373,8 +403,10 @@ export type TransferUncheckedCreateInput = {
   tenantId: string
   walletFromId: string
   walletToId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -386,8 +418,10 @@ export type TransferUncheckedCreateInput = {
 
 export type TransferUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -405,8 +439,10 @@ export type TransferUncheckedUpdateInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   walletFromId?: Prisma.StringFieldUpdateOperationsInput | string
   walletToId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -421,8 +457,10 @@ export type TransferCreateManyInput = {
   tenantId: string
   walletFromId: string
   walletToId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -432,8 +470,10 @@ export type TransferCreateManyInput = {
 
 export type TransferUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -446,8 +486,10 @@ export type TransferUncheckedUpdateManyInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   walletFromId?: Prisma.StringFieldUpdateOperationsInput | string
   walletToId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -470,8 +512,10 @@ export type TransferCountOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   walletFromId?: Prisma.SortOrder
   walletToId?: Prisma.SortOrder
-  amount?: Prisma.SortOrder
-  currency?: Prisma.SortOrder
+  fromAmount?: Prisma.SortOrder
+  toAmount?: Prisma.SortOrder
+  fromCurrency?: Prisma.SortOrder
+  toCurrency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   fxRate?: Prisma.SortOrder
   idempotencyKey?: Prisma.SortOrder
@@ -480,7 +524,8 @@ export type TransferCountOrderByAggregateInput = {
 }
 
 export type TransferAvgOrderByAggregateInput = {
-  amount?: Prisma.SortOrder
+  fromAmount?: Prisma.SortOrder
+  toAmount?: Prisma.SortOrder
   fxRate?: Prisma.SortOrder
 }
 
@@ -489,8 +534,10 @@ export type TransferMaxOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   walletFromId?: Prisma.SortOrder
   walletToId?: Prisma.SortOrder
-  amount?: Prisma.SortOrder
-  currency?: Prisma.SortOrder
+  fromAmount?: Prisma.SortOrder
+  toAmount?: Prisma.SortOrder
+  fromCurrency?: Prisma.SortOrder
+  toCurrency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   fxRate?: Prisma.SortOrder
   idempotencyKey?: Prisma.SortOrder
@@ -503,8 +550,10 @@ export type TransferMinOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   walletFromId?: Prisma.SortOrder
   walletToId?: Prisma.SortOrder
-  amount?: Prisma.SortOrder
-  currency?: Prisma.SortOrder
+  fromAmount?: Prisma.SortOrder
+  toAmount?: Prisma.SortOrder
+  fromCurrency?: Prisma.SortOrder
+  toCurrency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   fxRate?: Prisma.SortOrder
   idempotencyKey?: Prisma.SortOrder
@@ -513,7 +562,8 @@ export type TransferMinOrderByAggregateInput = {
 }
 
 export type TransferSumOrderByAggregateInput = {
-  amount?: Prisma.SortOrder
+  fromAmount?: Prisma.SortOrder
+  toAmount?: Prisma.SortOrder
   fxRate?: Prisma.SortOrder
 }
 
@@ -648,16 +698,24 @@ export type TransferUncheckedUpdateManyWithoutWalletToNestedInput = {
   deleteMany?: Prisma.TransferScalarWhereInput | Prisma.TransferScalarWhereInput[]
 }
 
+export type BigIntFieldUpdateOperationsInput = {
+  set?: bigint | number
+  increment?: bigint | number
+  decrement?: bigint | number
+  multiply?: bigint | number
+  divide?: bigint | number
+}
+
+export type EnumTransferStatusFieldUpdateOperationsInput = {
+  set?: $Enums.TransferStatus
+}
+
 export type DecimalFieldUpdateOperationsInput = {
   set?: runtime.Decimal | runtime.DecimalJsLike | number | string
   increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
   decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
   multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
-export type EnumTransferStatusFieldUpdateOperationsInput = {
-  set?: $Enums.TransferStatus
 }
 
 export type TransferCreateNestedOneWithoutJournalEntriesInput = {
@@ -690,8 +748,10 @@ export type TransferUpdateOneRequiredWithoutOutboxEventsNestedInput = {
 
 export type TransferCreateWithoutTenantInput = {
   id?: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -707,8 +767,10 @@ export type TransferUncheckedCreateWithoutTenantInput = {
   id?: string
   walletFromId: string
   walletToId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -752,8 +814,10 @@ export type TransferScalarWhereInput = {
   tenantId?: Prisma.StringFilter<"Transfer"> | string
   walletFromId?: Prisma.StringFilter<"Transfer"> | string
   walletToId?: Prisma.StringFilter<"Transfer"> | string
-  amount?: Prisma.DecimalFilter<"Transfer"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFilter<"Transfer"> | $Enums.Currency
+  fromAmount?: Prisma.BigIntFilter<"Transfer"> | bigint | number
+  toAmount?: Prisma.BigIntFilter<"Transfer"> | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFilter<"Transfer"> | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFilter<"Transfer"> | $Enums.Currency
   status?: Prisma.EnumTransferStatusFilter<"Transfer"> | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFilter<"Transfer"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.StringNullableFilter<"Transfer"> | string | null
@@ -763,8 +827,10 @@ export type TransferScalarWhereInput = {
 
 export type TransferCreateWithoutWalletFromInput = {
   id?: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -780,8 +846,10 @@ export type TransferUncheckedCreateWithoutWalletFromInput = {
   id?: string
   tenantId: string
   walletToId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -803,8 +871,10 @@ export type TransferCreateManyWalletFromInputEnvelope = {
 
 export type TransferCreateWithoutWalletToInput = {
   id?: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -820,8 +890,10 @@ export type TransferUncheckedCreateWithoutWalletToInput = {
   id?: string
   tenantId: string
   walletFromId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -875,8 +947,10 @@ export type TransferUpdateManyWithWhereWithoutWalletToInput = {
 
 export type TransferCreateWithoutJournalEntriesInput = {
   id?: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -893,8 +967,10 @@ export type TransferUncheckedCreateWithoutJournalEntriesInput = {
   tenantId: string
   walletFromId: string
   walletToId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -921,8 +997,10 @@ export type TransferUpdateToOneWithWhereWithoutJournalEntriesInput = {
 
 export type TransferUpdateWithoutJournalEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -939,8 +1017,10 @@ export type TransferUncheckedUpdateWithoutJournalEntriesInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   walletFromId?: Prisma.StringFieldUpdateOperationsInput | string
   walletToId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -951,8 +1031,10 @@ export type TransferUncheckedUpdateWithoutJournalEntriesInput = {
 
 export type TransferCreateWithoutOutboxEventsInput = {
   id?: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -969,8 +1051,10 @@ export type TransferUncheckedCreateWithoutOutboxEventsInput = {
   tenantId: string
   walletFromId: string
   walletToId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -997,8 +1081,10 @@ export type TransferUpdateToOneWithWhereWithoutOutboxEventsInput = {
 
 export type TransferUpdateWithoutOutboxEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1015,8 +1101,10 @@ export type TransferUncheckedUpdateWithoutOutboxEventsInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   walletFromId?: Prisma.StringFieldUpdateOperationsInput | string
   walletToId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1029,8 +1117,10 @@ export type TransferCreateManyTenantInput = {
   id?: string
   walletFromId: string
   walletToId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -1040,8 +1130,10 @@ export type TransferCreateManyTenantInput = {
 
 export type TransferUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1057,8 +1149,10 @@ export type TransferUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   walletFromId?: Prisma.StringFieldUpdateOperationsInput | string
   walletToId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1072,8 +1166,10 @@ export type TransferUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   walletFromId?: Prisma.StringFieldUpdateOperationsInput | string
   walletToId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1085,8 +1181,10 @@ export type TransferCreateManyWalletFromInput = {
   id?: string
   tenantId: string
   walletToId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -1098,8 +1196,10 @@ export type TransferCreateManyWalletToInput = {
   id?: string
   tenantId: string
   walletFromId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency: $Enums.Currency
+  fromAmount: bigint | number
+  toAmount: bigint | number
+  fromCurrency: $Enums.Currency
+  toCurrency: $Enums.Currency
   status?: $Enums.TransferStatus
   fxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: string | null
@@ -1109,8 +1209,10 @@ export type TransferCreateManyWalletToInput = {
 
 export type TransferUpdateWithoutWalletFromInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1126,8 +1228,10 @@ export type TransferUncheckedUpdateWithoutWalletFromInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   walletToId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1141,8 +1245,10 @@ export type TransferUncheckedUpdateManyWithoutWalletFromInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   walletToId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1152,8 +1258,10 @@ export type TransferUncheckedUpdateManyWithoutWalletFromInput = {
 
 export type TransferUpdateWithoutWalletToInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1169,8 +1277,10 @@ export type TransferUncheckedUpdateWithoutWalletToInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   walletFromId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1184,8 +1294,10 @@ export type TransferUncheckedUpdateManyWithoutWalletToInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   walletFromId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  fromAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  toAmount?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  fromCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  toCurrency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   status?: Prisma.EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
   fxRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1238,8 +1350,10 @@ export type TransferSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   tenantId?: boolean
   walletFromId?: boolean
   walletToId?: boolean
-  amount?: boolean
-  currency?: boolean
+  fromAmount?: boolean
+  toAmount?: boolean
+  fromCurrency?: boolean
+  toCurrency?: boolean
   status?: boolean
   fxRate?: boolean
   idempotencyKey?: boolean
@@ -1258,8 +1372,10 @@ export type TransferSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   tenantId?: boolean
   walletFromId?: boolean
   walletToId?: boolean
-  amount?: boolean
-  currency?: boolean
+  fromAmount?: boolean
+  toAmount?: boolean
+  fromCurrency?: boolean
+  toCurrency?: boolean
   status?: boolean
   fxRate?: boolean
   idempotencyKey?: boolean
@@ -1275,8 +1391,10 @@ export type TransferSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   tenantId?: boolean
   walletFromId?: boolean
   walletToId?: boolean
-  amount?: boolean
-  currency?: boolean
+  fromAmount?: boolean
+  toAmount?: boolean
+  fromCurrency?: boolean
+  toCurrency?: boolean
   status?: boolean
   fxRate?: boolean
   idempotencyKey?: boolean
@@ -1292,8 +1410,10 @@ export type TransferSelectScalar = {
   tenantId?: boolean
   walletFromId?: boolean
   walletToId?: boolean
-  amount?: boolean
-  currency?: boolean
+  fromAmount?: boolean
+  toAmount?: boolean
+  fromCurrency?: boolean
+  toCurrency?: boolean
   status?: boolean
   fxRate?: boolean
   idempotencyKey?: boolean
@@ -1301,7 +1421,7 @@ export type TransferSelectScalar = {
   updatedAt?: boolean
 }
 
-export type TransferOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "walletFromId" | "walletToId" | "amount" | "currency" | "status" | "fxRate" | "idempotencyKey" | "createdAt" | "updatedAt", ExtArgs["result"]["transfer"]>
+export type TransferOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "walletFromId" | "walletToId" | "fromAmount" | "toAmount" | "fromCurrency" | "toCurrency" | "status" | "fxRate" | "idempotencyKey" | "createdAt" | "updatedAt", ExtArgs["result"]["transfer"]>
 export type TransferInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   walletFrom?: boolean | Prisma.WalletDefaultArgs<ExtArgs>
@@ -1335,8 +1455,10 @@ export type $TransferPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     tenantId: string
     walletFromId: string
     walletToId: string
-    amount: runtime.Decimal
-    currency: $Enums.Currency
+    fromAmount: bigint
+    toAmount: bigint
+    fromCurrency: $Enums.Currency
+    toCurrency: $Enums.Currency
     status: $Enums.TransferStatus
     fxRate: runtime.Decimal
     idempotencyKey: string | null
@@ -1774,8 +1896,10 @@ export interface TransferFieldRefs {
   readonly tenantId: Prisma.FieldRef<"Transfer", 'String'>
   readonly walletFromId: Prisma.FieldRef<"Transfer", 'String'>
   readonly walletToId: Prisma.FieldRef<"Transfer", 'String'>
-  readonly amount: Prisma.FieldRef<"Transfer", 'Decimal'>
-  readonly currency: Prisma.FieldRef<"Transfer", 'Currency'>
+  readonly fromAmount: Prisma.FieldRef<"Transfer", 'BigInt'>
+  readonly toAmount: Prisma.FieldRef<"Transfer", 'BigInt'>
+  readonly fromCurrency: Prisma.FieldRef<"Transfer", 'Currency'>
+  readonly toCurrency: Prisma.FieldRef<"Transfer", 'Currency'>
   readonly status: Prisma.FieldRef<"Transfer", 'TransferStatus'>
   readonly fxRate: Prisma.FieldRef<"Transfer", 'Decimal'>
   readonly idempotencyKey: Prisma.FieldRef<"Transfer", 'String'>

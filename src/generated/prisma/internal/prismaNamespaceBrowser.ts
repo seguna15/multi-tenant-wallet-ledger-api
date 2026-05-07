@@ -79,6 +79,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const TenantScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  type: 'type',
   apiKeyHash: 'apiKeyHash',
   apiKeyLastUsedAt: 'apiKeyLastUsedAt',
   apiKeyExpiresAt: 'apiKeyExpiresAt',
@@ -97,6 +98,7 @@ export const UserScalarFieldEnum = {
   tenantId: 'tenantId',
   email: 'email',
   passwordHash: 'passwordHash',
+  role: 'role',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -139,8 +141,10 @@ export const TransferScalarFieldEnum = {
   tenantId: 'tenantId',
   walletFromId: 'walletFromId',
   walletToId: 'walletToId',
-  amount: 'amount',
-  currency: 'currency',
+  fromAmount: 'fromAmount',
+  toAmount: 'toAmount',
+  fromCurrency: 'fromCurrency',
+  toCurrency: 'toCurrency',
   status: 'status',
   fxRate: 'fxRate',
   idempotencyKey: 'idempotencyKey',

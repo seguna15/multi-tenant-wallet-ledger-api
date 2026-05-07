@@ -6,7 +6,7 @@ import { TenantClsGuard } from "@common/guards/tenant-cls.guard";
 import { RotateTenantWebhookSecretResult } from "@modules/tenant/types/tenant.types";
 import { ApiKeyGuard } from "@common/guards/api-key.guard";
 import { CurrentTenant } from "@common/decorators/current-tenant.decorator";
-import { AdminGuard } from "@common/guards/admin.guard";
+import { AdminKeyGuard } from "@common/guards/admin-key.guard";
 
 
 
@@ -21,10 +21,12 @@ export class TenantController {
     description:
       'Returns the API key once.. It cannot be retrieved again. Store it immediately',
   })
+  @ApiSecurity('x-admin-key')
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({
     description: 'Tenant registered api key returned once',
   })
+  @UseGuards(AdminKeyGuard)
   async registerSingleTenant(@Body() dto: CreateTenantDto) {
     return this.tenantService.createSingleTenant(dto);
   }
@@ -94,15 +96,15 @@ export class TenantController {
   }
 
   @Patch(':id/activate')
-  @UseGuards(AdminGuard)
+  @UseGuards(AdminKeyGuard)
   @ApiSecurity('x-admin-key')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Reactivate a soft-deleted tenant',
-    description: 'Admin-only. Pass the admin key in the x-admin-key header.',
+    summary: 'Toggle tenant activation',
+    description: 'Admin-only. Activates an inactive tenant or deactivates an active one.',
   })
-  @ApiOkResponse({ description: 'Tenant reactivated successfully' })
-  async activateSingleTenant(@Param('id') id: string) {
-    return this.tenantService.activateSingleTenant(id);
+  @ApiOkResponse({ description: 'Tenant activation status toggled successfully' })
+  async toggleTenantActivation(@Param('id') id: string) {
+    return this.tenantService.toggleTenantActivation(id);
   }
 }

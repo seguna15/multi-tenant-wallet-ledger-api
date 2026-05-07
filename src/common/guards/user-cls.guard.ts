@@ -13,6 +13,7 @@ export class UserClsGuard implements CanActivate {
         const user: RequestUser = request.user; //populated by passport-jwt
 
         this.clsService.set('userId', user.userId);
+        this.clsService.set('userRole', user.role);
       
         return true;
     }

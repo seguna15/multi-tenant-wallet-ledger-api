@@ -25,10 +25,6 @@ export class ApiKeyStrategy extends PassportStrategy(
     const keyHash = await hashApiKey(apiKey);
     const tenant = await this.tenantRepository.findByApiKeyHash(keyHash);
 
-    if (tenant) {
-      this.clsService.set('tenantId', tenant.id);
-    }
-
     if (
       !tenant ||
       !tenant.isActive ||
@@ -40,6 +36,8 @@ export class ApiKeyStrategy extends PassportStrategy(
     if (tenant.apiKeyExpiresAt && tenant.apiKeyExpiresAt < new Date()) {
       throw new UnauthorizedException('API key has expired');
     }
+
+    this.clsService.set('tenantId', tenant.id);
 
     this.tenantRepository.updateApiKeyLastUsedAt(tenant.id).catch(() => {
       this.logger.warn(

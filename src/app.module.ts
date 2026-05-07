@@ -10,6 +10,8 @@ import KeyvRedis from '@keyv/redis';
 import { ClsModule, ClsService } from 'nestjs-cls';
 import { LoggerModule } from 'nestjs-pino';
 import { WalletModule } from '@modules/wallet/wallet.module';
+import { LedgerModule } from '@modules/ledger/ledger.module';
+import { TransferModule } from '@modules/transfer/transfer.module';
 
 
 
@@ -68,6 +70,8 @@ import { WalletModule } from '@modules/wallet/wallet.module';
     TenantModule,
     AuthModule,
     WalletModule,
+    LedgerModule,
+    TransferModule,
   ],
   controllers: [],
   providers: [],

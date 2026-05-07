@@ -12,6 +12,7 @@ datasource db {
 model Tenant {
     id String @id @default(uuid())
     name String
+    type TenantType @default(CLIENT)
     apiKeyHash String @unique
     apiKeyLastUsedAt DateTime?
     apiKeyExpiresAt DateTime?
@@ -34,6 +35,7 @@ model User {
     tenantId String
     email String 
     passwordHash String
+    role UserRole @default(CUSTOMER)
     isActive Boolean @default(true)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -90,8 +92,10 @@ model Transfer {
     tenantId String
     walletFromId String
     walletToId String
-    amount Decimal @db.Decimal(18, 8)
-    currency Currency
+    fromAmount BigInt @db.BigInt
+    toAmount BigInt @db.BigInt
+    fromCurrency Currency
+    toCurrency Currency
     status TransferStatus @default(INITIATED)
     fxRate Decimal @default(1) @db.Decimal(18, 8)
     idempotencyKey String?  @unique
@@ -115,7 +119,7 @@ model JournalEntry {
     walletId String
     transferId String
     type JournalEntryType
-    amount Decimal @db.Decimal(18, 8)
+    amount BigInt @db.BigInt
     currency Currency
     createdAt DateTime @default(now())
 
@@ -146,6 +150,16 @@ model OutboxEvent {
     @@index([tenantId])
 }
 
+enum TenantType {
+    SYSTEM
+    CLIENT
+}
+
+enum UserRole {
+    SYSTEM_ADMIN
+    TENANT_ADMIN
+    CUSTOMER
+}
 
 enum Currency {
     USD

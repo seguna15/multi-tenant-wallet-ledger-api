@@ -22,6 +22,9 @@ import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { UserClsGuard } from '@common/guards/user-cls.guard';
 import { WalletService } from '@modules/wallet/wallet.service';
 import { CreateWalletDto, ListWalletsQueryDto } from '@modules/wallet/dto';
+import { RolesGuard } from '@common/guards/roles.guard';
+import { Roles } from '@common/decorators/roles.decorator';
+import { UserRole } from '@prisma-client';
 
 @ApiTags('Wallets')
 @ApiSecurity('x-api-key')
@@ -41,6 +44,8 @@ export class WalletController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard, UserClsGuard, RolesGuard)
+  @Roles(UserRole.TENANT_ADMIN)
   @ApiOperation({ summary: 'List wallets for the tenant (cursor-paginated)' })
   @ApiOkResponse({ description: 'Paginated wallet list with nextCursor' })
   listWallets(@Query() query: ListWalletsQueryDto) {

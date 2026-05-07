@@ -12,13 +12,13 @@ import {
   ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
-import { AdminGuard } from '@common/guards/admin.guard';
 import { WalletService } from './wallet.service';
 import { ListWalletsQueryDto } from '@modules/wallet/dto';
+import { AdminKeyGuard } from '@common/guards/admin-key.guard';
 
 @ApiTags('Admin - Wallets')
 @ApiSecurity('x-admin-key')
-@UseGuards(AdminGuard)
+@UseGuards(AdminKeyGuard)
 @Controller('admin/wallets')
 export class WalletAdminController {
   constructor(private readonly walletService: WalletService) {}

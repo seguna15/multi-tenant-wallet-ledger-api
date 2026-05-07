@@ -48,6 +48,7 @@ export class AuthService {
         userId: user.id,
         email: user.email,
         tenantId: user.tenantId,
+        role: user.role,
       });
     } catch (error) {
       if (error instanceof ConflictException) throw error;
@@ -70,6 +71,7 @@ export class AuthService {
         userId: user.id,
         email: user.email,
         tenantId: user.tenantId,
+        role: user.role,
       });
     } catch (error) {
       if (error instanceof UnauthorizedException) throw error;
@@ -129,6 +131,7 @@ export class AuthService {
         userId: stored.userId,
         email: user.email,
         tenantId: stored.tenantId,
+        role: user.role,
       });
       return { accessToken, refreshToken: newRaw };
     } catch (error) {
@@ -191,6 +194,7 @@ export class AuthService {
       sub: payload.userId,
       email: payload.email,
       tenantId: payload.tenantId,
+      role: payload.role,
     });
   }
 

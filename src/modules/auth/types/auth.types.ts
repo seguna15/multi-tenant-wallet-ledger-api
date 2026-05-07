@@ -1,13 +1,17 @@
+import { UserRole } from "@prisma-client";
+
 export interface RequestUser {
     userId: string;
     email: string;
     tenantId: string;
+    role: UserRole;
 }
 
 export interface JwtPayload {
     sub: string; // User ID
     email: string;
     tenantId: string; // Tenant ID
+    role: UserRole;
 }
 
 export interface CreateRefreshTokenData {
@@ -27,5 +31,6 @@ export interface TokenPair {
 export interface TokenPayload {
     userId: string;
     tenantId: string;
-    email: string
+    email: string;
+    role: UserRole;
 }

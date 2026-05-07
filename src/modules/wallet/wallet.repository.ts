@@ -75,19 +75,4 @@ export class WalletRepository extends BaseRepository {
       }),
     });
   }
-
-  async computeBalance(walletId: string): Promise<number> {
-    const [credits, debits] = await Promise.all([
-      this.prisma.journalEntry.aggregate({
-        where: this.withTenant({ walletId, type: JournalEntryType.CREDIT }),
-        _sum: { amount: true },
-      }),
-      this.prisma.journalEntry.aggregate({
-        where: this.withTenant({ walletId, type: JournalEntryType.DEBIT }),
-        _sum: { amount: true },
-      }),
-    ]);
-
-    return Number(credits._sum.amount ?? 0) - Number(debits._sum.amount ?? 0);
-  }
 }

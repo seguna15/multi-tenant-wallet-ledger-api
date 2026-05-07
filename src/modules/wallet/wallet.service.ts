@@ -1,6 +1,7 @@
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
   ConflictException,
+  forwardRef,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -11,6 +12,8 @@ import { ClsService } from 'nestjs-cls';
 import { TenantStore } from '@common/cls/tenant-store.interface';
 import { WalletRepository } from './wallet.repository';
 import { CreateWalletDto, ListWalletsQueryDto } from '@modules/wallet/dto';
+import { LedgerService } from '@modules/ledger/ledger.service';
+import { fromSmallestUnit } from '@common/utils/money.utils';
 
 const BALANCE_TTL_MS = 60_000; // cache-manager v5+ uses milliseconds
 
@@ -22,6 +25,8 @@ export class WalletService {
     private readonly walletRepository: WalletRepository,
     private readonly clsService: ClsService<TenantStore>,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+    @Inject(forwardRef(() => LedgerService))
+    private readonly ledgerService: LedgerService,
   ) {}
 
   async createWallet(dto: CreateWalletDto) {
@@ -55,7 +60,11 @@ export class WalletService {
   async listWallets(query: ListWalletsQueryDto) {
     try {
       const { currency, isActive, cursor, limit = 20 } = query;
-      return await this.walletRepository.findAllForTenant({ currency, isActive }, cursor, limit);
+      return await this.walletRepository.findAllForTenant(
+        { currency, isActive },
+        cursor,
+        limit,
+      );
     } catch {
       throw new InternalServerErrorException('Failed to list wallets');
     }
@@ -64,7 +73,11 @@ export class WalletService {
   async listMyWallets(query: ListWalletsQueryDto) {
     try {
       const { currency, isActive, cursor, limit = 20 } = query;
-      return await this.walletRepository.findAllForUser({ currency, isActive }, cursor, limit);
+      return await this.walletRepository.findAllForUser(
+        { currency, isActive },
+        cursor,
+        limit,
+      );
     } catch {
       throw new InternalServerErrorException('Failed to list wallets');
     }
@@ -73,7 +86,11 @@ export class WalletService {
   async listAllWallets(query: ListWalletsQueryDto) {
     try {
       const { currency, isActive, cursor, limit = 20 } = query;
-      return await this.walletRepository.findAll({ currency, isActive }, cursor, limit);
+      return await this.walletRepository.findAll(
+        { currency, isActive },
+        cursor,
+        limit,
+      );
     } catch {
       throw new InternalServerErrorException('Failed to list wallets');
     }
@@ -99,7 +116,8 @@ export class WalletService {
       }
 
       this.logger.log({ msg: 'balance cache miss', walletId: id });
-      const balance = await this.walletRepository.computeBalance(id);
+      const rawBalance = await this.ledgerService.computeBalance(id);
+      const balance = fromSmallestUnit(rawBalance, wallet.currency);
       await this.cacheManager.set(cacheKey, balance, BALANCE_TTL_MS);
 
       return {

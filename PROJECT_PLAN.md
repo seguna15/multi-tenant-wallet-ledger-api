@@ -131,12 +131,12 @@
 ### Day 7 — Wednesday 22nd April
 **Theme: Double-Entry Ledger Engine**
 
-- [ ] Generate Ledger NestJS module, service, controller
-- [ ] Implement journal entry writer — always writes DEBIT + CREDIT pair atomically
-- [ ] Implement balance calculator — `SUM(credits) - SUM(debits)` derived from JournalEntry, never stored
-- [ ] Implement `GET /ledger/:walletId` — returns paginated journal entries for a wallet
-- [ ] Enforce append-only — no update or delete methods exposed on JournalEntry
-- [ ] Write unit tests for ledger engine — verify debit/credit pairs, balance calculation
+- [x] Generate Ledger NestJS module, service, controller
+- [x] Implement journal entry writer — always writes DEBIT + CREDIT pair atomically
+- [x] Implement balance calculator — `SUM(credits) - SUM(debits)` derived from JournalEntry, never stored
+- [x] Implement `GET /ledger/:walletId` — returns paginated journal entries for a wallet
+- [x] Enforce append-only — no update or delete methods exposed on JournalEntry
+- [x] Write unit tests for ledger engine — verify debit/credit pairs, balance calculation
 
 **Checkpoint:** Journal entries are always written in pairs. Balance is always derived. No direct balance mutation exists anywhere in the codebase.
 
@@ -258,7 +258,7 @@
 
 #### Theme: Next.js Project Setup & Auth UI
 
-- [ ] Scaffold Next.js 15 app with TypeScript, App Router, Tailwind CSS, and shadcn/ui
+- [ ] Scaffold Next.js 16 app with TypeScript, App Router, Tailwind CSS, and shadcn/ui
 - [ ] Configure ESLint, Prettier, and path aliases
 - [ ] Set up TanStack Query for server state and Zod for form validation
 - [ ] Build `/login` page — email/password form, calls `POST /auth/login`, stores JWT in HTTP-only cookie

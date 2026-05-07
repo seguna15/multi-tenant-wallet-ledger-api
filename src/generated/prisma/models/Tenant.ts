@@ -27,6 +27,7 @@ export type AggregateTenant = {
 export type TenantMinAggregateOutputType = {
   id: string | null
   name: string | null
+  type: $Enums.TenantType | null
   apiKeyHash: string | null
   apiKeyLastUsedAt: Date | null
   apiKeyExpiresAt: Date | null
@@ -40,6 +41,7 @@ export type TenantMinAggregateOutputType = {
 export type TenantMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  type: $Enums.TenantType | null
   apiKeyHash: string | null
   apiKeyLastUsedAt: Date | null
   apiKeyExpiresAt: Date | null
@@ -53,6 +55,7 @@ export type TenantMaxAggregateOutputType = {
 export type TenantCountAggregateOutputType = {
   id: number
   name: number
+  type: number
   apiKeyHash: number
   apiKeyLastUsedAt: number
   apiKeyExpiresAt: number
@@ -68,6 +71,7 @@ export type TenantCountAggregateOutputType = {
 export type TenantMinAggregateInputType = {
   id?: true
   name?: true
+  type?: true
   apiKeyHash?: true
   apiKeyLastUsedAt?: true
   apiKeyExpiresAt?: true
@@ -81,6 +85,7 @@ export type TenantMinAggregateInputType = {
 export type TenantMaxAggregateInputType = {
   id?: true
   name?: true
+  type?: true
   apiKeyHash?: true
   apiKeyLastUsedAt?: true
   apiKeyExpiresAt?: true
@@ -94,6 +99,7 @@ export type TenantMaxAggregateInputType = {
 export type TenantCountAggregateInputType = {
   id?: true
   name?: true
+  type?: true
   apiKeyHash?: true
   apiKeyLastUsedAt?: true
   apiKeyExpiresAt?: true
@@ -180,6 +186,7 @@ export type TenantGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 export type TenantGroupByOutputType = {
   id: string
   name: string
+  type: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt: Date | null
   apiKeyExpiresAt: Date | null
@@ -214,6 +221,7 @@ export type TenantWhereInput = {
   NOT?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[]
   id?: Prisma.StringFilter<"Tenant"> | string
   name?: Prisma.StringFilter<"Tenant"> | string
+  type?: Prisma.EnumTenantTypeFilter<"Tenant"> | $Enums.TenantType
   apiKeyHash?: Prisma.StringFilter<"Tenant"> | string
   apiKeyLastUsedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   apiKeyExpiresAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
@@ -233,6 +241,7 @@ export type TenantWhereInput = {
 export type TenantOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   apiKeyHash?: Prisma.SortOrder
   apiKeyLastUsedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   apiKeyExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -256,6 +265,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.TenantWhereInput[]
   NOT?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[]
   name?: Prisma.StringFilter<"Tenant"> | string
+  type?: Prisma.EnumTenantTypeFilter<"Tenant"> | $Enums.TenantType
   apiKeyLastUsedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   apiKeyExpiresAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   webhookUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
@@ -274,6 +284,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
 export type TenantOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   apiKeyHash?: Prisma.SortOrder
   apiKeyLastUsedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   apiKeyExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -293,6 +304,7 @@ export type TenantScalarWhereWithAggregatesInput = {
   NOT?: Prisma.TenantScalarWhereWithAggregatesInput | Prisma.TenantScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   name?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
+  type?: Prisma.EnumTenantTypeWithAggregatesFilter<"Tenant"> | $Enums.TenantType
   apiKeyHash?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   apiKeyLastUsedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
   apiKeyExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
@@ -306,6 +318,7 @@ export type TenantScalarWhereWithAggregatesInput = {
 export type TenantCreateInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -325,6 +338,7 @@ export type TenantCreateInput = {
 export type TenantUncheckedCreateInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -344,6 +358,7 @@ export type TenantUncheckedCreateInput = {
 export type TenantUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -363,6 +378,7 @@ export type TenantUpdateInput = {
 export type TenantUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -382,6 +398,7 @@ export type TenantUncheckedUpdateInput = {
 export type TenantCreateManyInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -395,6 +412,7 @@ export type TenantCreateManyInput = {
 export type TenantUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -408,6 +426,7 @@ export type TenantUpdateManyMutationInput = {
 export type TenantUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -421,6 +440,7 @@ export type TenantUncheckedUpdateManyInput = {
 export type TenantCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   apiKeyHash?: Prisma.SortOrder
   apiKeyLastUsedAt?: Prisma.SortOrder
   apiKeyExpiresAt?: Prisma.SortOrder
@@ -434,6 +454,7 @@ export type TenantCountOrderByAggregateInput = {
 export type TenantMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   apiKeyHash?: Prisma.SortOrder
   apiKeyLastUsedAt?: Prisma.SortOrder
   apiKeyExpiresAt?: Prisma.SortOrder
@@ -447,6 +468,7 @@ export type TenantMaxOrderByAggregateInput = {
 export type TenantMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   apiKeyHash?: Prisma.SortOrder
   apiKeyLastUsedAt?: Prisma.SortOrder
   apiKeyExpiresAt?: Prisma.SortOrder
@@ -464,6 +486,10 @@ export type TenantScalarRelationFilter = {
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
+}
+
+export type EnumTenantTypeFieldUpdateOperationsInput = {
+  set?: $Enums.TenantType
 }
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -569,6 +595,7 @@ export type TenantUpdateOneRequiredWithoutOutboxEventsNestedInput = {
 export type TenantCreateWithoutUsersInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -587,6 +614,7 @@ export type TenantCreateWithoutUsersInput = {
 export type TenantUncheckedCreateWithoutUsersInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -621,6 +649,7 @@ export type TenantUpdateToOneWithWhereWithoutUsersInput = {
 export type TenantUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -639,6 +668,7 @@ export type TenantUpdateWithoutUsersInput = {
 export type TenantUncheckedUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -657,6 +687,7 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
 export type TenantCreateWithoutRefreshTokensInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -675,6 +706,7 @@ export type TenantCreateWithoutRefreshTokensInput = {
 export type TenantUncheckedCreateWithoutRefreshTokensInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -709,6 +741,7 @@ export type TenantUpdateToOneWithWhereWithoutRefreshTokensInput = {
 export type TenantUpdateWithoutRefreshTokensInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -727,6 +760,7 @@ export type TenantUpdateWithoutRefreshTokensInput = {
 export type TenantUncheckedUpdateWithoutRefreshTokensInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -745,6 +779,7 @@ export type TenantUncheckedUpdateWithoutRefreshTokensInput = {
 export type TenantCreateWithoutWalletsInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -763,6 +798,7 @@ export type TenantCreateWithoutWalletsInput = {
 export type TenantUncheckedCreateWithoutWalletsInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -797,6 +833,7 @@ export type TenantUpdateToOneWithWhereWithoutWalletsInput = {
 export type TenantUpdateWithoutWalletsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -815,6 +852,7 @@ export type TenantUpdateWithoutWalletsInput = {
 export type TenantUncheckedUpdateWithoutWalletsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -833,6 +871,7 @@ export type TenantUncheckedUpdateWithoutWalletsInput = {
 export type TenantCreateWithoutTransfersInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -851,6 +890,7 @@ export type TenantCreateWithoutTransfersInput = {
 export type TenantUncheckedCreateWithoutTransfersInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -885,6 +925,7 @@ export type TenantUpdateToOneWithWhereWithoutTransfersInput = {
 export type TenantUpdateWithoutTransfersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -903,6 +944,7 @@ export type TenantUpdateWithoutTransfersInput = {
 export type TenantUncheckedUpdateWithoutTransfersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -921,6 +963,7 @@ export type TenantUncheckedUpdateWithoutTransfersInput = {
 export type TenantCreateWithoutJournalEntriesInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -939,6 +982,7 @@ export type TenantCreateWithoutJournalEntriesInput = {
 export type TenantUncheckedCreateWithoutJournalEntriesInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -973,6 +1017,7 @@ export type TenantUpdateToOneWithWhereWithoutJournalEntriesInput = {
 export type TenantUpdateWithoutJournalEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -991,6 +1036,7 @@ export type TenantUpdateWithoutJournalEntriesInput = {
 export type TenantUncheckedUpdateWithoutJournalEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1009,6 +1055,7 @@ export type TenantUncheckedUpdateWithoutJournalEntriesInput = {
 export type TenantCreateWithoutOutboxEventsInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -1027,6 +1074,7 @@ export type TenantCreateWithoutOutboxEventsInput = {
 export type TenantUncheckedCreateWithoutOutboxEventsInput = {
   id?: string
   name: string
+  type?: $Enums.TenantType
   apiKeyHash: string
   apiKeyLastUsedAt?: Date | string | null
   apiKeyExpiresAt?: Date | string | null
@@ -1061,6 +1109,7 @@ export type TenantUpdateToOneWithWhereWithoutOutboxEventsInput = {
 export type TenantUpdateWithoutOutboxEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1079,6 +1128,7 @@ export type TenantUpdateWithoutOutboxEventsInput = {
 export type TenantUncheckedUpdateWithoutOutboxEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTenantTypeFieldUpdateOperationsInput | $Enums.TenantType
   apiKeyHash?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeyLastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   apiKeyExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1173,6 +1223,7 @@ export type TenantCountOutputTypeCountOutboxEventsArgs<ExtArgs extends runtime.T
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  type?: boolean
   apiKeyHash?: boolean
   apiKeyLastUsedAt?: boolean
   apiKeyExpiresAt?: boolean
@@ -1193,6 +1244,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  type?: boolean
   apiKeyHash?: boolean
   apiKeyLastUsedAt?: boolean
   apiKeyExpiresAt?: boolean
@@ -1206,6 +1258,7 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  type?: boolean
   apiKeyHash?: boolean
   apiKeyLastUsedAt?: boolean
   apiKeyExpiresAt?: boolean
@@ -1219,6 +1272,7 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type TenantSelectScalar = {
   id?: boolean
   name?: boolean
+  type?: boolean
   apiKeyHash?: boolean
   apiKeyLastUsedAt?: boolean
   apiKeyExpiresAt?: boolean
@@ -1229,7 +1283,7 @@ export type TenantSelectScalar = {
   updatedAt?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "apiKeyHash" | "apiKeyLastUsedAt" | "apiKeyExpiresAt" | "webhookUrl" | "webhookSecret" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "type" | "apiKeyHash" | "apiKeyLastUsedAt" | "apiKeyExpiresAt" | "webhookUrl" | "webhookSecret" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.Tenant$refreshTokensArgs<ExtArgs>
@@ -1255,6 +1309,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    type: $Enums.TenantType
     apiKeyHash: string
     apiKeyLastUsedAt: Date | null
     apiKeyExpiresAt: Date | null
@@ -1694,6 +1749,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
 export interface TenantFieldRefs {
   readonly id: Prisma.FieldRef<"Tenant", 'String'>
   readonly name: Prisma.FieldRef<"Tenant", 'String'>
+  readonly type: Prisma.FieldRef<"Tenant", 'TenantType'>
   readonly apiKeyHash: Prisma.FieldRef<"Tenant", 'String'>
   readonly apiKeyLastUsedAt: Prisma.FieldRef<"Tenant", 'DateTime'>
   readonly apiKeyExpiresAt: Prisma.FieldRef<"Tenant", 'DateTime'>

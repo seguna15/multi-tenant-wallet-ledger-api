@@ -36,7 +36,9 @@ export class TenantService {
         webhookSecret: encryptedWebhookSecret,
       });
 
-      return { tenant, apiKey: plaintextApiKey };
+      
+      const { apiKeyHash: _, ...sanitizedTenant } = tenant;
+      return { tenant: sanitizedTenant, apiKey: plaintextApiKey };
     } catch (error) {
       // P2002: unique constraint violation on apiKeyHash — astronomically rare
       // but if it happens, fail fast rather than silently storing a duplicate
@@ -52,9 +54,11 @@ export class TenantService {
     }
   }
 
-  async updateSingleTenant(id: string, dto: UpdateTenantDto): Promise<Tenant> {
+  async updateSingleTenant(id: string, dto: UpdateTenantDto): Promise<Omit<Tenant, 'apiKeyHash'>> {
     try {
-      return await this.tenantRepository.updateSingleTenant(id, dto);
+      const tenant = await this.tenantRepository.updateSingleTenant(id, dto);
+      const { apiKeyHash: _, ...sanitizedTenant } = tenant;
+      return sanitizedTenant;
     } catch (error) {
       // P2025: record not found — the id+tenantId where clause matched nothing
       if (
@@ -138,17 +142,15 @@ export class TenantService {
     return { webhookSecret: newSecret };
   }
 
-  async activateSingleTenant(id: string): Promise<Tenant> {
+  async toggleTenantActivation(id: string): Promise<Omit<Tenant, 'apiKeyHash'>> {
     const tenant = await this.tenantRepository.findSingleTenant(id);
 
     if (!tenant) {
       throw new NotFoundException(`Tenant ${id} not found`);
     }
 
-    if (tenant.isActive) {
-      throw new ConflictException('Tenant is already active');
-    }
-
-    return this.tenantRepository.activateSingleTenant(id);
+    const updatedTenant = await this.tenantRepository.setTenantActive(id, !tenant.isActive);
+    const { apiKeyHash: _, ...sanitizedTenant } = updatedTenant;
+    return sanitizedTenant;
   }
 }

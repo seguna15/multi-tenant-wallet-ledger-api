@@ -1,7 +1,7 @@
 import { Tenant } from "@prisma-client";
 
 export interface CreateTenantResult {
-    tenant: Tenant;
+    tenant: Omit<Tenant, 'apiKeyHash'>;
     apiKey: string; // Plaintext API key, only returned on creation
     webhookSecret?: string; // Plaintext webhook secret, only returned on creation if provided
 }

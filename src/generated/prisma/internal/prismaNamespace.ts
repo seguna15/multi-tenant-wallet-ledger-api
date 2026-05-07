@@ -970,6 +970,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const TenantScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  type: 'type',
   apiKeyHash: 'apiKeyHash',
   apiKeyLastUsedAt: 'apiKeyLastUsedAt',
   apiKeyExpiresAt: 'apiKeyExpiresAt',
@@ -988,6 +989,7 @@ export const UserScalarFieldEnum = {
   tenantId: 'tenantId',
   email: 'email',
   passwordHash: 'passwordHash',
+  role: 'role',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1030,8 +1032,10 @@ export const TransferScalarFieldEnum = {
   tenantId: 'tenantId',
   walletFromId: 'walletFromId',
   walletToId: 'walletToId',
-  amount: 'amount',
-  currency: 'currency',
+  fromAmount: 'fromAmount',
+  toAmount: 'toAmount',
+  fromCurrency: 'fromCurrency',
+  toCurrency: 'toCurrency',
   status: 'status',
   fxRate: 'fxRate',
   idempotencyKey: 'idempotencyKey',
@@ -1132,6 +1136,20 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
+ * Reference to a field of type 'TenantType'
+ */
+export type EnumTenantTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TenantType'>
+    
+
+
+/**
+ * Reference to a field of type 'TenantType[]'
+ */
+export type ListEnumTenantTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TenantType[]'>
+    
+
+
+/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -1153,6 +1171,20 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'UserRole'
+ */
+export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
+    
+
+
+/**
+ * Reference to a field of type 'UserRole[]'
+ */
+export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+    
+
+
+/**
  * Reference to a field of type 'Currency'
  */
 export type EnumCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Currency'>
@@ -1167,16 +1199,16 @@ export type ListEnumCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 
 
 /**
- * Reference to a field of type 'Decimal'
+ * Reference to a field of type 'BigInt'
  */
-export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
     
 
 
 /**
- * Reference to a field of type 'Decimal[]'
+ * Reference to a field of type 'BigInt[]'
  */
-export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
     
 
 
@@ -1191,6 +1223,20 @@ export type EnumTransferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$P
  * Reference to a field of type 'TransferStatus[]'
  */
 export type ListEnumTransferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransferStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal'
+ */
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal[]'
+ */
+export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 
