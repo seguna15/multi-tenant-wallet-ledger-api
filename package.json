@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "name": "ledger-app",
+  "packageManager": "pnpm@11.5.3",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "format": "turbo format"
+  },
+  "devDependencies": {
+    "turbo": "latest"
+  }
+}

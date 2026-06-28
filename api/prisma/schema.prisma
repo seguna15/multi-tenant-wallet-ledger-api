@@ -1,0 +1,236 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Tenant {
+    id String @id @default(uuid())
+    name String
+    type TenantType @default(CLIENT)
+    apiKeyHash String @unique
+    apiKeyLastUsedAt DateTime?
+    apiKeyExpiresAt DateTime?
+    webhookUrl String?
+    webhookSecret String?
+    isActive Boolean @default(true)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    users User[]
+    refreshTokens RefreshToken[]
+    wallets Wallet[]
+    transfers Transfer[]
+    journalEntries JournalEntry[]
+    outboxEvents OutboxEvent[]
+}
+
+model User {
+    id String @id @default(uuid())
+    tenantId String
+    email String 
+    passwordHash String
+    role UserRole @default(CUSTOMER)
+    isActive Boolean @default(true)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    tenant Tenant @relation(fields: [tenantId], references: [id])
+    wallets Wallet[]
+    refreshTokens RefreshToken[]
+
+    @@unique([tenantId, email])
+    @@index([tenantId])
+}
+
+model RefreshToken {
+    id String @id @default(uuid())
+    tenantId String
+    userId String
+    tokenHash String @unique
+    familyId  String
+    replacedByHash String?
+    revoked Boolean @default(false)
+    expiresAt DateTime
+    absoluteExpireAt DateTime
+    createdAt DateTime @default(now())
+
+    tenant Tenant @relation(fields: [tenantId], references: [id])
+    user User @relation(fields: [userId], references: [id])
+
+    @@index([userId])
+    @@index([tenantId])
+    @@index([familyId, tenantId])
+}
+
+model Wallet {
+    id String @id @default(uuid())
+    tenantId String
+    userId String
+    currency Currency
+    accountNumber String @unique
+    isActive Boolean @default(true)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    tenant Tenant @relation(fields: [tenantId], references: [id])
+    user User @relation(fields: [userId], references: [id])
+    transfersFrom Transfer[] @relation("WalletFrom")
+    transfersTo Transfer[] @relation("WalletTo")
+    journalEntries JournalEntry[]
+
+    @@index([tenantId,userId])
+    
+}
+
+model Transfer {
+    id String @id @default(uuid())
+    tenantId String
+    walletFromId String
+    walletToId String
+    fromAmount BigInt @db.BigInt
+    toAmount BigInt @db.BigInt
+    fromCurrency Currency
+    toCurrency Currency
+    status TransferStatus @default(INITIATED)
+    fxRate Decimal @default(1) @db.Decimal(18, 8)
+    idempotencyKey String?  @unique
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    tenant Tenant @relation(fields: [tenantId], references: [id])
+    walletFrom Wallet @relation("WalletFrom", fields: [walletFromId], references: [id])
+    walletTo Wallet @relation("WalletTo", fields: [walletToId], references: [id])
+    journalEntries JournalEntry[]
+    outboxEvents OutboxEvent[]
+
+    @@index([tenantId, createdAt])           // dashboard: findAllForTenant, no status filter, ORDER BY createdAt
+    @@index([tenantId, status, createdAt])   // dashboard: findAllForTenant, status filter applied, ORDER BY createdAt
+    @@index([walletFromId, createdAt])       // frontend: findAllForUser/export — outgoing side (narrows to one wallet first)
+    @@index([walletToId, createdAt])         // frontend: findAllForUser/export — incoming side
+    @@index([idempotencyKey])
+    @@index([tenantId, walletFromId, status]) // computePendingOutgoing — runs on every transfer creation under wallet lock
+}
+
+
+model JournalEntry {
+    id String @id @default(uuid())
+    tenantId String
+    walletId String
+    transferId String
+    type JournalEntryType
+    amount BigInt @db.BigInt
+    currency Currency
+    createdAt DateTime @default(now())
+
+    tenant Tenant @relation(fields: [tenantId], references: [id])
+    wallet Wallet @relation(fields: [walletId], references: [id])
+    transfer Transfer @relation(fields: [transferId], references: [id])
+
+    @@unique([transferId, walletId, type])
+    @@index([tenantId])
+    @@index([tenantId, walletId])
+    @@index([tenantId, transferId])
+}
+
+model OutboxEvent {
+    id String @id @default(uuid())
+    tenantId String
+    transferId String @unique
+    eventType OutboxEventType
+    payload Json
+    status OutboxStatus @default(PENDING)
+    retryCount Int @default(0)
+    publishedAt DateTime?
+    createdAt DateTime @default(now())
+
+    tenant Tenant @relation(fields: [tenantId], references: [id])
+    transfer Transfer @relation(fields: [transferId], references: [id])
+
+    @@index([tenantId, status])
+    @@index([tenantId])
+}
+
+model DlqEvent {
+    id            String    @id @default(uuid())
+    queue         String
+    exchange      String
+    routingKey    String
+    payload       Json
+    headers       Json
+    correlationId String?
+    tenantId      String?
+    reason        DlqReason
+    replayedAt    DateTime?
+    replayedBy    String?   // userId of the SYSTEM_ADMIN who triggered replay
+    createdAt     DateTime  @default(now())
+
+    
+    @@index([queue, replayedAt]) // for "unreplayed events per queue" queries
+     // Tenant-scoped lookups (most common access pattern)
+    @@index([tenantId, createdAt(sort: Desc)])
+
+    // Correlation ID lookups (event tracing)
+    @@index([correlationId])
+
+    // Queue browsing (admin views scoped to a queue)
+    @@index([queue, createdAt])
+
+}
+
+enum TenantType {
+    SYSTEM
+    CLIENT
+}
+
+enum UserRole {
+    SYSTEM_ADMIN
+    TENANT_ADMIN
+    CUSTOMER
+}
+
+enum Currency {
+    USD
+    EUR
+    GBP
+    NGN
+    JPY
+    AUD
+    CAD
+    CNY
+}
+
+
+enum TransferStatus {
+    INITIATED
+    PROCESSING
+    COMPLETED
+    FAILED
+}
+
+enum JournalEntryType {
+    DEBIT
+    CREDIT
+}
+
+enum OutboxStatus {
+    PENDING
+    PUBLISHED
+    FAILED
+}
+
+enum OutboxEventType {
+    TRANSFER_INITIATED
+    TRANSFER_COMPLETED
+    TRANSFER_FAILED
+}
+
+enum DlqReason {
+    MALFORMED_MESSAGE
+    MAX_RETRIES_EXHAUSTED
+}
